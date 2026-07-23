@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4af6e259e2475eb4085366c626f3b264, type: 3}
+  m_Name: Dog-guardian
+  m_EditorClassIdentifier: Game3.HuntingGame::Game3.Hunting.DogDefinition
+  id: guardian
+  displayName: Guardian
+  price: 800
+  detectionRadius: 12
+  damage: 20
+  attackCooldown: 0.7
+  moveSpeed: 5.4
+  sprites:
+  - {fileID: 4147983536220425839, guid: 383361bbb0f3ef84ea95ce8f6f3619d5, type: 3}
+  - {fileID: 2580923584396200023, guid: 383361bbb0f3ef84ea95ce8f6f3619d5, type: 3}
+  - {fileID: -3842505087829341795, guid: 383361bbb0f3ef84ea95ce8f6f3619d5, type: 3}
+  - {fileID: -5006604881560468788, guid: 383361bbb0f3ef84ea95ce8f6f3619d5, type: 3}
+  - {fileID: -3165642829246685058, guid: 383361bbb0f3ef84ea95ce8f6f3619d5, type: 3}
+  - {fileID: 7548034493598649257, guid: 383361bbb0f3ef84ea95ce8f6f3619d5, type: 3}
+  - {fileID: 4559934906240384948, guid: 383361bbb0f3ef84ea95ce8f6f3619d5, type: 3}

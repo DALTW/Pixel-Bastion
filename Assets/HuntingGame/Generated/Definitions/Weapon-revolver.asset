@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ddf5bf705d7334ea34a048c36a205c, type: 3}
+  m_Name: Weapon-revolver
+  m_EditorClassIdentifier: Game3.HuntingGame::Game3.Hunting.WeaponDefinition
+  id: revolver
+  displayName: Revolver
+  price: 180
+  damage: 45
+  fireInterval: 0.5
+  magazineSize: 6
+  reloadTime: 1.4
+  automatic: 0
+  ammoBundleSize: 24
+  ammoBundlePrice: 30
+  worldSprite: {fileID: -2606765578528506932, guid: c0dfccb817119364489bf3c7b08ce06f, type: 3}

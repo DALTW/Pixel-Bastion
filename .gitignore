@@ -8,6 +8,7 @@
 [Uu]ser[Ss]ettings/
 [Mm]emoryCaptures/
 [Rr]ecordings/
+.verification/
 
 # IDE and editor files
 .vs/

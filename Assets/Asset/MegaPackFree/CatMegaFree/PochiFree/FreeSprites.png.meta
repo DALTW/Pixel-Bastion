@@ -1,0 +1,1014 @@
+fileFormatVersion: 2
+guid: 56f633f8c18a0634791e45e06e23f5fe
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2750259337835850155
+    second: FreeSprites_0
+  - first:
+      213: 3540031675834808536
+    second: FreeSprites_1
+  - first:
+      213: -5649103297279328932
+    second: FreeSprites_2
+  - first:
+      213: 4218967856536630552
+    second: FreeSprites_3
+  - first:
+      213: 8101368130524896489
+    second: FreeSprites_4
+  - first:
+      213: -3692584073559358039
+    second: FreeSprites_5
+  - first:
+      213: -3044050450674733319
+    second: FreeSprites_6
+  - first:
+      213: 3763909096744344645
+    second: FreeSprites_7
+  - first:
+      213: 7083500420757824730
+    second: FreeSprites_8
+  - first:
+      213: -3425186106684573838
+    second: FreeSprites_9
+  - first:
+      213: 2301653511201285530
+    second: FreeSprites_10
+  - first:
+      213: 6578188868694208681
+    second: FreeSprites_11
+  - first:
+      213: -537670892056321844
+    second: FreeSprites_12
+  - first:
+      213: 1575709374518300107
+    second: FreeSprites_13
+  - first:
+      213: 6911736560504170412
+    second: FreeSprites_14
+  - first:
+      213: 444508713079384657
+    second: FreeSprites_15
+  - first:
+      213: -216100837298331695
+    second: FreeSprites_16
+  - first:
+      213: 3212299339213002647
+    second: FreeSprites_17
+  - first:
+      213: -4094781076141756648
+    second: FreeSprites_18
+  - first:
+      213: -7185144078395873827
+    second: FreeSprites_19
+  - first:
+      213: 7068903829584461269
+    second: FreeSprites_20
+  - first:
+      213: -1480456579535268827
+    second: FreeSprites_21
+  - first:
+      213: -6582071688897531082
+    second: FreeSprites_22
+  - first:
+      213: -7549987848033813184
+    second: FreeSprites_23
+  - first:
+      213: 1194463137723689359
+    second: FreeSprites_24
+  - first:
+      213: 1570194251049412072
+    second: FreeSprites_25
+  - first:
+      213: 7494010466408696998
+    second: FreeSprites_26
+  - first:
+      213: -8534671675766344449
+    second: FreeSprites_27
+  - first:
+      213: 2718395427972391077
+    second: FreeSprites_28
+  - first:
+      213: 6653577461175173510
+    second: FreeSprites_29
+  - first:
+      213: -7526401051120414859
+    second: FreeSprites_30
+  - first:
+      213: 3833788651899662302
+    second: FreeSprites_31
+  - first:
+      213: -2250065678292384158
+    second: FreeSprites_32
+  - first:
+      213: 9113256697531933422
+    second: FreeSprites_33
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FreeSprites_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 371
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba928e7db42ea2620800000000000000
+      internalID: 2750259337835850155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_1
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 371
+        width: 43
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d8b3c3ad08b02130800000000000000
+      internalID: 3540031675834808536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_2
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 371
+        width: 43
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5d7d2a3b7a5a91b0800000000000000
+      internalID: -5649103297279328932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_3
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 371
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81538a799e8cc8a30800000000000000
+      internalID: 4218967856536630552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 306
+        width: 49
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ec5b9e4467dd6070800000000000000
+      internalID: 8101368130524896489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_5
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 306
+        width: 48
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a5ca38695e41ccc0800000000000000
+      internalID: -3692584073559358039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_6
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 242
+        width: 62
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fe2a214e3c51c5d0800000000000000
+      internalID: -3044050450674733319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_7
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 281
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54cde46a1671c3430800000000000000
+      internalID: 3763909096744344645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_8
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 281
+        width: 14
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad4a9994a16ad4260800000000000000
+      internalID: 7083500420757824730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_9
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 281
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2777675226b4770d0800000000000000
+      internalID: -3425186106684573838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_10
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 242
+        width: 62
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a95ee2b7cad11ff10800000000000000
+      internalID: 2301653511201285530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_11
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 242
+        width: 62
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a072ff5ceb6a4b50800000000000000
+      internalID: 6578188868694208681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_12
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 242
+        width: 62
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc06ae02c2fc988f0800000000000000
+      internalID: -537670892056321844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_13
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 190
+        width: 45
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcd8a61e35b0ed510800000000000000
+      internalID: 1575709374518300107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_14
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 190
+        width: 45
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca76ee528cb6bef50800000000000000
+      internalID: 6911736560504170412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_15
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 189
+        width: 45
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15aa9a6c1563b2600800000000000000
+      internalID: 444508713079384657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_16
+      rect:
+        serializedVersion: 2
+        x: 203
+        y: 189
+        width: 45
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1df1b25fe61400df0800000000000000
+      internalID: -216100837298331695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_17
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 3
+        width: 87
+        height: 177
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7975302ca31649c20800000000000000
+      internalID: 3212299339213002647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_18
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 131
+        width: 27
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81f249b6e4a6c27c0800000000000000
+      internalID: -4094781076141756648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_19
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 130
+        width: 27
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd5663b778d394c90800000000000000
+      internalID: -7185144078395873827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_20
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 131
+        width: 27
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ddb7c1949ac91260800000000000000
+      internalID: 7068903829584461269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_21
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 105
+        width: 35
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 524196fa59c547be0800000000000000
+      internalID: -1480456579535268827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_22
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 73
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6337b191ca8c7a4a0800000000000000
+      internalID: -6582071688897531082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_23
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 73
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04dbd63cd0e093790800000000000000
+      internalID: -7549987848033813184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_24
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 73
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f89a15d25e5939010800000000000000
+      internalID: 1194463137723689359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_25
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 73
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e529222a537ac510800000000000000
+      internalID: 1570194251049412072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_26
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 40
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ac895170d2100860800000000000000
+      internalID: 7494010466408696998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_27
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 40
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff4fb5b5451ce8980800000000000000
+      internalID: -8534671675766344449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_28
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 40
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a027533d3ea9b520800000000000000
+      internalID: 2718395427972391077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_29
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 40
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68144e2e271465c50800000000000000
+      internalID: 6653577461175173510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_30
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 9
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57f47dede1adc8790800000000000000
+      internalID: -7526401051120414859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_31
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 9
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edf2764777a543530800000000000000
+      internalID: 3833788651899662302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_32
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 7
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 266851cdf2926c0e0800000000000000
+      internalID: -2250065678292384158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FreeSprites_33
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 7
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee2275baeaac87e70800000000000000
+      internalID: 9113256697531933422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      FreeSprites_0: 2750259337835850155
+      FreeSprites_1: 3540031675834808536
+      FreeSprites_10: 2301653511201285530
+      FreeSprites_11: 6578188868694208681
+      FreeSprites_12: -537670892056321844
+      FreeSprites_13: 1575709374518300107
+      FreeSprites_14: 6911736560504170412
+      FreeSprites_15: 444508713079384657
+      FreeSprites_16: -216100837298331695
+      FreeSprites_17: 3212299339213002647
+      FreeSprites_18: -4094781076141756648
+      FreeSprites_19: -7185144078395873827
+      FreeSprites_2: -5649103297279328932
+      FreeSprites_20: 7068903829584461269
+      FreeSprites_21: -1480456579535268827
+      FreeSprites_22: -6582071688897531082
+      FreeSprites_23: -7549987848033813184
+      FreeSprites_24: 1194463137723689359
+      FreeSprites_25: 1570194251049412072
+      FreeSprites_26: 7494010466408696998
+      FreeSprites_27: -8534671675766344449
+      FreeSprites_28: 2718395427972391077
+      FreeSprites_29: 6653577461175173510
+      FreeSprites_3: 4218967856536630552
+      FreeSprites_30: -7526401051120414859
+      FreeSprites_31: 3833788651899662302
+      FreeSprites_32: -2250065678292384158
+      FreeSprites_33: 9113256697531933422
+      FreeSprites_4: 8101368130524896489
+      FreeSprites_5: -3692584073559358039
+      FreeSprites_6: -3044050450674733319
+      FreeSprites_7: 3763909096744344645
+      FreeSprites_8: 7083500420757824730
+      FreeSprites_9: -3425186106684573838
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
