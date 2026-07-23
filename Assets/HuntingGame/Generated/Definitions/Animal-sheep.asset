@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6bdde1b550b99541a90a0e8b36b92af, type: 3}
+  m_Name: Animal-sheep
+  m_EditorClassIdentifier: Game3.HuntingGame::Game3.Hunting.AnimalDefinition
+  id: sheep
+  displayName: "\uC57C\uC0DD \uC591"
+  maxResolve: 55
+  moveSpeed: 3.1
+  detectionRadius: 6.2
+  canRetaliate: 0
+  retaliationChance: 0
+  attackRange: 1.05
+  attackDamage: 0
+  attackCooldown: 1
+  visualScale: 0.8
+  lootDrops:
+  - type: 0
+    minAmount: 1
+    maxAmount: 1
+    chance: 1
+  - type: 2
+    minAmount: 2
+    maxAmount: 3
+    chance: 1
+  idleSprites:
+  - {fileID: 6792788541964517201, guid: a4058a4a0c878a1488f23a6b2d64d4ea, type: 3}
+  - {fileID: -898362295336178069, guid: a4058a4a0c878a1488f23a6b2d64d4ea, type: 3}
+  - {fileID: -4047893366646885139, guid: a4058a4a0c878a1488f23a6b2d64d4ea, type: 3}
+  - {fileID: -2894447196254621924, guid: a4058a4a0c878a1488f23a6b2d64d4ea, type: 3}
+  moveSprites:
+  - {fileID: 6792788541964517201, guid: a4058a4a0c878a1488f23a6b2d64d4ea, type: 3}
+  - {fileID: -898362295336178069, guid: a4058a4a0c878a1488f23a6b2d64d4ea, type: 3}
+  - {fileID: -4047893366646885139, guid: a4058a4a0c878a1488f23a6b2d64d4ea, type: 3}
+  - {fileID: -2894447196254621924, guid: a4058a4a0c878a1488f23a6b2d64d4ea, type: 3}

@@ -8,16 +8,16 @@ namespace Game3.Hunting
     {
         public string id = "animal";
         public string displayName = "동물";
-        public bool hostile;
-        public float maxHealth = 35f;
+        public float maxResolve = 35f;
         public float moveSpeed = 2.5f;
         public float detectionRadius = 6f;
+        public bool canRetaliate;
+        [Range(0f, 1f)] public float retaliationChance;
         public float attackRange = 1.1f;
         public float attackDamage = 15f;
         public float attackCooldown = 1f;
-        public int meatYield = 1;
-        public int hideYield;
-        [Range(0f, 1f)] public float hideChance = 1f;
+        public float visualScale = 1f;
+        public LootDrop[] lootDrops = Array.Empty<LootDrop>();
         public Sprite[] idleSprites = Array.Empty<Sprite>();
         public Sprite[] moveSprites = Array.Empty<Sprite>();
     }

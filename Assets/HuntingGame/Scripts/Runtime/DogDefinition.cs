@@ -10,7 +10,7 @@ namespace Game3.Hunting
         public string displayName = "동료 개";
         public int price = 350;
         public float detectionRadius = 8f;
-        public float damage = 12f;
+        public float subduePower = 12f;
         public float attackCooldown = 0.8f;
         public float moveSpeed = 5f;
         public Sprite[] sprites = Array.Empty<Sprite>();
