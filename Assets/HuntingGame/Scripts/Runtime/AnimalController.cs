@@ -9,34 +9,38 @@ namespace Game3.Hunting
         private HuntingGameController game;
         private Rigidbody2D body;
         private SimpleSpriteAnimator animator;
-        private float health;
+        private float resolve;
         private Vector2 wanderDirection;
         private float chooseDirectionAt;
         private float fleeUntil;
         private Vector2 threatPosition;
+        private float retaliateUntil;
         private float nextAttackTime;
 
         public AnimalDefinition Definition => definition;
-        public bool IsHostile => definition != null && definition.hostile;
-        public bool IsAlive => health > 0f;
+        public bool IsHostile => definition != null && definition.canRetaliate;
+        public bool IsAlive => !IsSubdued;
+        public bool IsSubdued { get; private set; }
+        public float Resolve => resolve;
+        public float MaxResolve => definition?.maxResolve ?? 0f;
 
         public void Initialize(AnimalDefinition animalDefinition, HuntingGameController controller)
         {
             definition = animalDefinition;
             game = controller;
-            health = definition.maxHealth;
+            resolve = definition.maxResolve;
             body = GetComponent<Rigidbody2D>();
             animator = GetComponent<SimpleSpriteAnimator>();
             body.gravityScale = 0f;
             body.freezeRotation = true;
-            GetComponent<CircleCollider2D>().radius = definition.hostile ? 0.42f : 0.32f;
+            GetComponent<CircleCollider2D>().radius = Mathf.Lerp(0.25f, 0.52f, definition.visualScale * 0.45f);
             animator.Play(definition.idleSprites, 5f);
             PickWanderDirection();
         }
 
         private void FixedUpdate()
         {
-            if (!IsAlive || game == null || game.Player == null)
+            if (IsSubdued || game == null || game.Player == null)
             {
                 return;
             }
@@ -45,14 +49,9 @@ namespace Game3.Hunting
             var playerPosition = (Vector2)game.Player.transform.position;
             Vector2 velocity;
 
-            if (definition.hostile)
-            {
-                velocity = UpdateHostile(position, playerPosition);
-            }
-            else
-            {
-                velocity = UpdatePrey(position, playerPosition);
-            }
+            velocity = Time.time < retaliateUntil
+                ? UpdateRetaliation(position, playerPosition)
+                : UpdatePrey(position, playerPosition);
 
             position += velocity * Time.fixedDeltaTime;
             position = game.ClampToWorld(position, 1f);
@@ -62,21 +61,29 @@ namespace Game3.Hunting
                 velocity.sqrMagnitude > 0.02f ? 10f : 5f);
         }
 
-        public void TakeDamage(float amount, Vector2 sourcePosition)
+        public void TakeSubdueDamage(float amount, Vector2 sourcePosition)
         {
-            if (!IsAlive)
+            if (IsSubdued)
             {
                 return;
             }
 
-            health = Mathf.Max(0f, health - Mathf.Max(0f, amount));
+            resolve = Mathf.Max(0f, resolve - Mathf.Max(0f, amount));
             threatPosition = sourcePosition;
             fleeUntil = Time.time + 3f;
-            if (health <= 0f)
+            if (resolve <= 0f)
             {
-                Die();
+                Subdue();
+                return;
+            }
+
+            if (definition.canRetaliate && Random.value <= definition.retaliationChance)
+            {
+                retaliateUntil = Time.time + 3.2f;
             }
         }
+
+        public void TakeDamage(float amount, Vector2 sourcePosition) => TakeSubdueDamage(amount, sourcePosition);
 
         private Vector2 UpdatePrey(Vector2 position, Vector2 playerPosition)
         {
@@ -101,7 +108,7 @@ namespace Game3.Hunting
             return WanderVelocity();
         }
 
-        private Vector2 UpdateHostile(Vector2 position, Vector2 playerPosition)
+        private Vector2 UpdateRetaliation(Vector2 position, Vector2 playerPosition)
         {
             if (game.IsInsideCamp(position))
             {
@@ -121,7 +128,7 @@ namespace Game3.Hunting
                 return Vector2.zero;
             }
 
-            if (distance <= definition.detectionRadius && !game.IsInsideCamp(playerPosition))
+            if (!game.IsInsideCamp(playerPosition))
             {
                 return (playerPosition - position).normalized * definition.moveSpeed;
             }
@@ -145,11 +152,14 @@ namespace Game3.Hunting
             chooseDirectionAt = Time.time + Random.Range(1.5f, 4f);
         }
 
-        private void Die()
+        private void Subdue()
         {
+            IsSubdued = true;
             body.linearVelocity = Vector2.zero;
-            game.HandleAnimalDeath(this);
-            Destroy(gameObject);
+            body.simulated = false;
+            animator.Play(definition.idleSprites, 3f);
+            animator.Renderer.color = new Color(0.62f, 0.7f, 0.72f, 0.95f);
+            game.HandleAnimalSubdued(this);
         }
     }
 }

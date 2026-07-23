@@ -2,7 +2,8 @@
   "name": "Game3.HuntingGame.EditModeTests",
   "rootNamespace": "Game3.Hunting.Tests",
   "references": [
-    "Game3.HuntingGame"
+    "Game3.HuntingGame",
+    "Game3.HuntingGame.Editor"
   ],
   "includePlatforms": [
     "Editor"

@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Guardian
   price: 800
   detectionRadius: 12
-  damage: 20
+  subduePower: 20
   attackCooldown: 0.7
   moveSpeed: 5.4
   sprites:

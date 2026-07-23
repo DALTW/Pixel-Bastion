@@ -7,53 +7,68 @@ using UnityEngine;
 namespace Game3.Hunting
 {
     [Serializable]
-    public sealed class WeaponAmmoSave
+    public sealed class HunterUpgradeSave
     {
-        public string weaponId;
-        public int reserveAmmo;
-        public int magazineAmmo;
+        public HunterUpgradeType type;
+        public int level;
     }
 
     [Serializable]
     public sealed class HuntingSaveData
     {
-        public int version = 1;
+        public int version = HuntingSaveSystem.CurrentVersion;
         public int money = 50;
-        public string equippedWeaponId = "glock";
-        public List<string> ownedWeaponIds = new List<string> { "glock" };
         public List<string> ownedDogIds = new List<string>();
-        public List<WeaponAmmoSave> weaponAmmo = new List<WeaponAmmoSave>();
+        public List<HunterUpgradeSave> upgrades = new List<HunterUpgradeSave>();
 
         public void Normalize()
         {
-            version = 1;
+            version = HuntingSaveSystem.CurrentVersion;
             money = Math.Max(0, money);
-            ownedWeaponIds ??= new List<string>();
             ownedDogIds ??= new List<string>();
-            weaponAmmo ??= new List<WeaponAmmoSave>();
-            ownedWeaponIds = ownedWeaponIds.Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().ToList();
+            upgrades ??= new List<HunterUpgradeSave>();
             ownedDogIds = ownedDogIds.Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().Take(2).ToList();
-            if (!ownedWeaponIds.Contains("glock"))
+            upgrades = upgrades
+                .Where(item => item != null)
+                .GroupBy(item => item.type)
+                .Select(group => new HunterUpgradeSave
+                {
+                    type = group.Key,
+                    level = Math.Max(0, group.Max(item => item.level))
+                })
+                .ToList();
+
+            foreach (HunterUpgradeType type in Enum.GetValues(typeof(HunterUpgradeType)))
             {
-                ownedWeaponIds.Insert(0, "glock");
+                if (upgrades.All(item => item.type != type))
+                {
+                    upgrades.Add(new HunterUpgradeSave { type = type, level = 0 });
+                }
+            }
+        }
+
+        public int GetUpgradeLevel(HunterUpgradeType type)
+        {
+            return upgrades?.FirstOrDefault(item => item != null && item.type == type)?.level ?? 0;
+        }
+
+        public void SetUpgradeLevel(HunterUpgradeType type, int level)
+        {
+            upgrades ??= new List<HunterUpgradeSave>();
+            var state = upgrades.FirstOrDefault(item => item != null && item.type == type);
+            if (state == null)
+            {
+                state = new HunterUpgradeSave { type = type };
+                upgrades.Add(state);
             }
 
-            if (string.IsNullOrWhiteSpace(equippedWeaponId) || !ownedWeaponIds.Contains(equippedWeaponId))
-            {
-                equippedWeaponId = ownedWeaponIds[0];
-            }
-
-            foreach (var ammo in weaponAmmo)
-            {
-                ammo.reserveAmmo = Math.Max(0, ammo.reserveAmmo);
-                ammo.magazineAmmo = Math.Max(0, ammo.magazineAmmo);
-            }
+            state.level = Math.Max(0, level);
         }
     }
 
     public sealed class HuntingSaveSystem
     {
-        public const int CurrentVersion = 1;
+        public const int CurrentVersion = 2;
         public string SavePath { get; }
 
         public HuntingSaveSystem(string savePath = null)
@@ -73,10 +88,25 @@ namespace Game3.Hunting
             try
             {
                 var json = File.ReadAllText(SavePath);
-                var data = JsonUtility.FromJson<HuntingSaveData>(json);
-                if (data == null || data.version != CurrentVersion)
+                var envelope = JsonUtility.FromJson<SaveVersionEnvelope>(json);
+                HuntingSaveData data;
+                if (envelope != null && envelope.version == 1)
+                {
+                    var legacy = JsonUtility.FromJson<LegacyHuntingSaveDataV1>(json);
+                    data = MigrateLegacy(legacy, startingMoney);
+                }
+                else if (envelope != null && envelope.version == CurrentVersion)
+                {
+                    data = JsonUtility.FromJson<HuntingSaveData>(json);
+                }
+                else
                 {
                     throw new InvalidDataException("지원하지 않는 저장 데이터입니다.");
+                }
+
+                if (data == null)
+                {
+                    throw new InvalidDataException("저장 데이터가 비어 있습니다.");
                 }
 
                 data.Normalize();
@@ -116,13 +146,26 @@ namespace Game3.Hunting
             {
                 version = CurrentVersion,
                 money = Math.Max(0, startingMoney),
-                equippedWeaponId = "glock",
-                ownedWeaponIds = new List<string> { "glock" },
                 ownedDogIds = new List<string>(),
-                weaponAmmo = new List<WeaponAmmoSave>
-                {
-                    new WeaponAmmoSave { weaponId = "glock", reserveAmmo = 32, magazineAmmo = 8 }
-                }
+                upgrades = Enum.GetValues(typeof(HunterUpgradeType))
+                    .Cast<HunterUpgradeType>()
+                    .Select(type => new HunterUpgradeSave { type = type, level = 0 })
+                    .ToList()
+            };
+        }
+
+        private static HuntingSaveData MigrateLegacy(LegacyHuntingSaveDataV1 legacy, int startingMoney)
+        {
+            return new HuntingSaveData
+            {
+                version = CurrentVersion,
+                money = Math.Max(0, legacy?.money ?? startingMoney),
+                ownedDogIds = legacy?.ownedDogIds?
+                    .Where(id => !string.IsNullOrWhiteSpace(id))
+                    .Distinct()
+                    .Take(2)
+                    .ToList() ?? new List<string>(),
+                upgrades = new List<HunterUpgradeSave>()
             };
         }
 
@@ -142,6 +185,20 @@ namespace Game3.Hunting
             {
                 Debug.LogWarning($"손상된 저장 파일 백업에 실패했습니다: {exception.Message}");
             }
+        }
+
+        [Serializable]
+        private sealed class SaveVersionEnvelope
+        {
+            public int version;
+        }
+
+        [Serializable]
+        private sealed class LegacyHuntingSaveDataV1
+        {
+            public int version = 1;
+            public int money;
+            public List<string> ownedDogIds = new List<string>();
         }
     }
 }

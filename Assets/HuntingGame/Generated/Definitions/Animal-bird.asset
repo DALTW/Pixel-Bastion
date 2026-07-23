@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6bdde1b550b99541a90a0e8b36b92af, type: 3}
+  m_Name: Animal-bird
+  m_EditorClassIdentifier: Game3.HuntingGame::Game3.Hunting.AnimalDefinition
+  id: bird
+  displayName: "\uB4E4\uC0C8"
+  maxResolve: 15
+  moveSpeed: 4.5
+  detectionRadius: 6
+  canRetaliate: 0
+  retaliationChance: 0
+  attackRange: 1.05
+  attackDamage: 0
+  attackCooldown: 1
+  visualScale: 1
+  lootDrops:
+  - type: 3
+    minAmount: 1
+    maxAmount: 2
+    chance: 1
+  - type: 0
+    minAmount: 1
+    maxAmount: 1
+    chance: 0.5
+  idleSprites:
+  - {fileID: 2553609784176096277, guid: 563ba65899c4e56409f8f093a5d983da, type: 3}
+  - {fileID: 1778433201136315002, guid: 563ba65899c4e56409f8f093a5d983da, type: 3}
+  - {fileID: -1430060304514893999, guid: 563ba65899c4e56409f8f093a5d983da, type: 3}
+  - {fileID: 1906188007896694670, guid: 563ba65899c4e56409f8f093a5d983da, type: 3}
+  moveSprites:
+  - {fileID: 2553609784176096277, guid: 563ba65899c4e56409f8f093a5d983da, type: 3}
+  - {fileID: 1778433201136315002, guid: 563ba65899c4e56409f8f093a5d983da, type: 3}
+  - {fileID: -1430060304514893999, guid: 563ba65899c4e56409f8f093a5d983da, type: 3}
+  - {fileID: 1906188007896694670, guid: 563ba65899c4e56409f8f093a5d983da, type: 3}

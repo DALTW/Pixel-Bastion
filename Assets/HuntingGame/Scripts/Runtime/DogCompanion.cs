@@ -10,7 +10,7 @@ namespace Game3.Hunting
         private int slot;
         private Rigidbody2D body;
         private SimpleSpriteAnimator animator;
-        private AnimalController targetWolf;
+        private AnimalController targetAnimal;
         private float nextScanTime;
         private float nextAttackTime;
 
@@ -47,15 +47,15 @@ namespace Game3.Hunting
                                   new Vector2(-0.9f - slot * 0.65f, slot % 2 == 0 ? -0.75f : 0.75f);
             var destination = desiredPosition;
 
-            if (targetWolf != null && targetWolf.IsAlive &&
-                Vector2.Distance(position, targetWolf.transform.position) <= definition.detectionRadius)
+            if (targetAnimal != null && !targetAnimal.IsSubdued &&
+                Vector2.Distance(position, targetAnimal.transform.position) <= definition.detectionRadius)
             {
-                destination = targetWolf.transform.position;
+                destination = targetAnimal.transform.position;
                 var distance = Vector2.Distance(position, destination);
                 if (distance <= 0.85f && Time.time >= nextAttackTime)
                 {
                     nextAttackTime = Time.time + definition.attackCooldown;
-                    targetWolf.TakeDamage(definition.damage, position);
+                    targetAnimal.TakeSubdueDamage(definition.subduePower, position);
                 }
             }
 
@@ -68,15 +68,15 @@ namespace Game3.Hunting
 
         private void ScanTargets()
         {
-            targetWolf = null;
-            AnimalController trackedRabbit = null;
-            var wolfDistance = float.MaxValue;
-            var rabbitDistance = float.MaxValue;
+            targetAnimal = null;
+            AnimalController trackedPrey = null;
+            var targetDistance = float.MaxValue;
+            var trackedDistance = float.MaxValue;
             var position = (Vector2)transform.position;
 
             foreach (var animal in game.Animals)
             {
-                if (animal == null || !animal.IsAlive)
+                if (animal == null || animal.IsSubdued)
                 {
                     continue;
                 }
@@ -87,21 +87,22 @@ namespace Game3.Hunting
                     continue;
                 }
 
-                if (animal.IsHostile && distance < wolfDistance)
+                if (distance < targetDistance)
                 {
-                    targetWolf = animal;
-                    wolfDistance = distance;
+                    targetAnimal = animal;
+                    targetDistance = distance;
                 }
-                else if (!animal.IsHostile && distance < rabbitDistance)
+
+                if (distance < trackedDistance)
                 {
-                    trackedRabbit = animal;
-                    rabbitDistance = distance;
+                    trackedPrey = animal;
+                    trackedDistance = distance;
                 }
             }
 
-            if (trackedRabbit != null)
+            if (trackedPrey != null)
             {
-                game.ReportTrackedPrey(trackedRabbit, rabbitDistance);
+                game.ReportTrackedPrey(trackedPrey, trackedDistance);
             }
         }
     }

@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Game3.Hunting.Tests
@@ -30,17 +31,15 @@ namespace Game3.Hunting.Tests
             var system = new HuntingSaveSystem(savePath);
             var data = HuntingSaveSystem.CreateDefault(50);
             data.money = 725;
-            data.ownedWeaponIds.Add("revolver");
             data.ownedDogIds.Add("scout");
-            data.equippedWeaponId = "revolver";
+            data.SetUpgradeLevel(HunterUpgradeType.SubduePower, 2);
             system.Save(data);
 
             var loaded = system.LoadOrCreate(50);
 
             Assert.That(loaded.money, Is.EqualTo(725));
-            Assert.That(loaded.ownedWeaponIds, Does.Contain("revolver"));
             Assert.That(loaded.ownedDogIds, Does.Contain("scout"));
-            Assert.That(loaded.equippedWeaponId, Is.EqualTo("revolver"));
+            Assert.That(loaded.GetUpgradeLevel(HunterUpgradeType.SubduePower), Is.EqualTo(2));
         }
 
         [Test]
@@ -57,20 +56,35 @@ namespace Game3.Hunting.Tests
         }
 
         [Test]
-        public void Normalize_AlwaysRestoresStarterWeaponAndLimitsDogs()
+        public void Normalize_AddsUpgradeStatesAndLimitsDogs()
         {
             var data = new HuntingSaveData
             {
-                ownedWeaponIds = new System.Collections.Generic.List<string>(),
                 ownedDogIds = new System.Collections.Generic.List<string> { "a", "b", "c" },
-                equippedWeaponId = "missing"
+                upgrades = new System.Collections.Generic.List<HunterUpgradeSave>()
             };
 
             data.Normalize();
 
-            Assert.That(data.ownedWeaponIds, Does.Contain("glock"));
-            Assert.That(data.equippedWeaponId, Is.EqualTo("glock"));
             Assert.That(data.ownedDogIds, Has.Count.EqualTo(2));
+            Assert.That(data.upgrades, Has.Count.EqualTo(3));
+        }
+
+        [Test]
+        public void VersionOneSave_MigratesMoneyAndDogsButDropsWeapons()
+        {
+            Directory.CreateDirectory(temporaryDirectory);
+            File.WriteAllText(savePath,
+                "{\"version\":1,\"money\":930,\"equippedWeaponId\":\"ak47\"," +
+                "\"ownedWeaponIds\":[\"glock\",\"ak47\"],\"ownedDogIds\":[\"guardian\"]}");
+            var system = new HuntingSaveSystem(savePath);
+
+            var loaded = system.LoadOrCreate(50);
+
+            Assert.That(loaded.version, Is.EqualTo(HuntingSaveSystem.CurrentVersion));
+            Assert.That(loaded.money, Is.EqualTo(930));
+            Assert.That(loaded.ownedDogIds, Is.EquivalentTo(new[] { "guardian" }));
+            Assert.That(loaded.upgrades.All(item => item.level == 0), Is.True);
         }
     }
 }
