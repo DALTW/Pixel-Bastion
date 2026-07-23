@@ -1,0 +1,23 @@
+{
+  "name": "Game3.HuntingGame.EditModeTests",
+  "rootNamespace": "Game3.Hunting.Tests",
+  "references": [
+    "Game3.HuntingGame"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

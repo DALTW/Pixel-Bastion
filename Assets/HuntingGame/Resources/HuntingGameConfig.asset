@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e4ec3f0e4a42b84bb3dca223ce3d627, type: 3}
+  m_Name: HuntingGameConfig
+  m_EditorClassIdentifier: Game3.HuntingGame::Game3.Hunting.HuntingGameConfig
+  weapons:
+  - {fileID: 11400000, guid: 99ad3878e46010e4d90672c16d7d897c, type: 2}
+  - {fileID: 11400000, guid: 05cd28f315ea4914db0371be49d3801c, type: 2}
+  - {fileID: 11400000, guid: 2bbd63e4f9cf88648b1bcf2ea5edaddf, type: 2}
+  - {fileID: 11400000, guid: 7cfe0af946b6e3c488ac79b0c14eb44b, type: 2}
+  rabbit: {fileID: 11400000, guid: bacb5ef1ca460584da19a9f26c2bb87b, type: 2}
+  wolf: {fileID: 11400000, guid: 85ec625f0c10d92428f53f720c86f334, type: 2}
+  dogs:
+  - {fileID: 11400000, guid: 5fe3f491b55c2254fa33878f95916113, type: 2}
+  - {fileID: 11400000, guid: 34b427bc0372f72469982c633aee3c38, type: 2}
+  playerIdleSprites:
+  - {fileID: 4723107735738678597, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: -7385789195546760866, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: 3234629978573100161, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: 6373048116405451881, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: 7264182050183361747, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: -2834552850196481573, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: 3278449094680734212, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: 3384493420599841878, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: -2331352242086191015, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: -3914248031228685145, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: 7132915409514813599, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  - {fileID: -2055793278435719954, guid: a9a588c6d3c8242489824edd7e0cf83b, type: 3}
+  playerWalkSprites:
+  - {fileID: 4035959289877228764, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: -982904232830982447, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: -350908408369970039, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: -5409570386352685021, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 1553940418269799609, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 2416434504916517810, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: -6428935122508569504, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 7144598999076838305, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 7500509103958437945, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 1008816216748069464, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 11406907883527339, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 8030128826893041618, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 2315132830120601726, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 7929438602540414932, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 5250438378151091228, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: -1258472680374559522, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 2155107402851330559, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  - {fileID: 7720552135500433751, guid: 4b1c1402ebc6c4748b1a5ba474070e26, type: 3}
+  environmentSprites:
+  - {fileID: -5062081054402078237, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: 1695292101499232445, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: -1400023059284977056, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: -8764965426705603438, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: 939264097576087446, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: -2015156786378593274, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: -3782032975704049256, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: -7910195237937851234, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: 1820245197975899975, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: -6091981265946106432, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  - {fileID: -1787317447362759218, guid: b2a14e8a932d6d043865036f568351c0, type: 3}
+  meatIcon: {fileID: 3524353645357222929, guid: e69a9dee1756e9441a58301ae63c53c0, type: 3}
+  hideIcon: {fileID: 3260980947347434782, guid: e69a9dee1756e9441a58301ae63c53c0, type: 3}
+  startingMoney: 50
+  meatSellPrice: 12
+  hideSellPrice: 28
+  inventoryCapacity: 24
+  worldSize: {x: 60, y: 40}
+  campPosition: {x: -23, y: 0}
+  campSafeRadius: 7
+  rabbitPopulation: 14
+  wolfPopulation: 5
