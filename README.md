@@ -28,15 +28,6 @@ Pixel Bastion은 Unity 6로 제작한 2D 픽셀 아트 횡스크롤 디펜스 �
 4. Monster를 처치해 골드를 획득하고 새로운 Human을 소환합니다.
 5. 강해지는 웨이브를 막고 타워가 파괴되지 않도록 방어합니다.
 
-### 실행 방법
-
-1. Unity Hub에서 저장소 폴더를 추가합니다.
-2. Unity `6000.5.4f1`로 프로젝트를 엽니다.
-3. `Assets/Scenes/SideDefense.unity` 씬을 엽니다.
-4. Play 버튼을 눌러 게임을 실행합니다.
-
-자세한 제작 기록은 [`Docs/DevelopmentLog_2026-07-26.md`](Docs/DevelopmentLog_2026-07-26.md), 게임 소개는 [`Docs/PixelBastion_Introduction.md`](Docs/PixelBastion_Introduction.md)에서 확인할 수 있습니다.
-
 ---
 
 ## 이전 프로토타입: Sunnyside 포획 게임
