@@ -49,7 +49,7 @@ namespace Game3.SideDefense.Editor
                 "Swordsman",
                 $"{HumanRoot}/Swordsman/Swordsman with shadows/Swordsman-Idle.png",
                 $"{HumanRoot}/Swordsman/Swordsman with shadows/Swordsman-Walk.png",
-                85,
+                95,
                 115f,
                 1.3f),
             new CharacterSpec(
@@ -57,7 +57,7 @@ namespace Game3.SideDefense.Editor
                 $"{HumanRoot}/Knight/Knight with shadows/Knight-Idle.png",
                 $"{HumanRoot}/Knight/Knight with shadows/Knight-Walk.png",
                 100,
-                135f,
+                155f,
                 1.1f),
             new CharacterSpec(
                 "Lancer",
@@ -268,6 +268,10 @@ namespace Game3.SideDefense.Editor
                     projectilePrefab,
                     GetProjectileSpeed(spec.DisplayName),
                     projectileOriginObject.transform);
+                if (spec.DisplayName == "Priest")
+                {
+                    unit.ConfigureHealing(20f, attackRange);
+                }
 
                 GameObject healthBarAnchor = new GameObject("HP Bar Anchor");
                 healthBarAnchor.transform.SetParent(root.transform, false);
@@ -396,7 +400,7 @@ namespace Game3.SideDefense.Editor
                     attackRange = 2.8f;
                     break;
                 case "Wizard":
-                    damage = 31f;
+                    damage = 40f;
                     attackInterval = 1.25f;
                     attackRange = 3.1f;
                     break;
@@ -752,8 +756,8 @@ namespace Game3.SideDefense.Editor
                 image.rectTransform,
                 new Vector2(1f, 0f),
                 new Vector2(1f, 0f),
-                new Vector2(-12f, 12f),
-                new Vector2(132f, 126f),
+                new Vector2(-12f, 54f),
+                new Vector2(132f, 84f),
                 new Vector2(1f, 0f));
             AddOutline(
                 image.gameObject,

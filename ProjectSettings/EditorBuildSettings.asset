@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/HuntingGame.unity
-    guid: da8a71309e84e9843ae6376146e33c0c
+    path: Assets/Scenes/SideDefense.unity
+    guid: 136833b6696209d42ac211feca9e98a2
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

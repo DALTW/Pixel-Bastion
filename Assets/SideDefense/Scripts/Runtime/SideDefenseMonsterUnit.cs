@@ -22,7 +22,11 @@ namespace Game3.SideDefense
         [SerializeField, Min(0.1f)] private float projectileSpeed = 6f;
         [SerializeField] private Transform projectileOrigin;
         [SerializeField, Min(1)] private int monsterLevel = 1;
+        [SerializeField, Range(0.1f, 1f)]
+        private float towerDamageMultiplier = 1f;
         [SerializeField, Min(0)] private int coinReward = 10;
+        [SerializeField, Min(0f)]
+        private float coinRewardIncreasePerLevel = 0.1f;
         [SerializeField] private SideDefenseHealthBar healthBar;
         [SerializeField] private SideDefenseTower targetTower;
 
@@ -42,7 +46,10 @@ namespace Game3.SideDefense
         public float AttackRange => attackRange;
         public float TowerAttackRange => towerAttackRange;
         public SideDefenseAttackStyle AttackStyle => attackStyle;
-        public int CoinReward => CalculateCoinReward(coinReward, monsterLevel);
+        public int CoinReward => CalculateCoinReward(
+            coinReward,
+            monsterLevel,
+            coinRewardIncreasePerLevel);
         public bool WasDefeatedByHuman => wasDefeatedByHuman;
         public static IReadOnlyList<SideDefenseMonsterUnit> ActiveUnits =>
             ActiveMonsterUnits;
@@ -70,6 +77,7 @@ namespace Game3.SideDefense
             attackRange = Mathf.Max(0.1f, combatRange);
             detectionRange = Mathf.Max(attackRange + 0.5f, 2.4f);
             monsterLevel = 1;
+            towerDamageMultiplier = 1f;
             coinReward = Mathf.Max(0, reward);
             wasDefeatedByHuman = false;
             RefreshHealthBar();
@@ -101,9 +109,15 @@ namespace Game3.SideDefense
             float healthMultiplier,
             float damageMultiplier,
             float speedMultiplier,
-            int level)
+            int level,
+            float rewardIncreasePerLevel,
+            float damageAgainstTowerMultiplier)
         {
             monsterLevel = Mathf.Max(1, level);
+            towerDamageMultiplier =
+                Mathf.Clamp(damageAgainstTowerMultiplier, 0.1f, 1f);
+            coinRewardIncreasePerLevel =
+                Mathf.Max(0f, rewardIncreasePerLevel);
             maxHealth = Mathf.Max(
                 1f,
                 maxHealth * Mathf.Max(1f, healthMultiplier));
@@ -245,7 +259,7 @@ namespace Game3.SideDefense
                 return;
             }
 
-            tower.TakeDamage(attackDamage);
+            tower.TakeDamage(attackDamage * towerDamageMultiplier);
         }
 
         public void TakeDamage(float damage)
@@ -325,15 +339,30 @@ namespace Game3.SideDefense
             towerAttackRange = Mathf.Max(0.1f, towerAttackRange);
             projectileSpeed = Mathf.Max(0.1f, projectileSpeed);
             monsterLevel = Mathf.Max(1, monsterLevel);
+            towerDamageMultiplier =
+                Mathf.Clamp(towerDamageMultiplier, 0.1f, 1f);
             coinReward = Mathf.Max(0, coinReward);
+            coinRewardIncreasePerLevel =
+                Mathf.Max(0f, coinRewardIncreasePerLevel);
             RefreshHealthBar();
         }
 
         public static int CalculateCoinReward(int baseReward, int level)
         {
+            return CalculateCoinReward(baseReward, level, 0.1f);
+        }
+
+        public static int CalculateCoinReward(
+            int baseReward,
+            int level,
+            float rewardIncreasePerLevel)
+        {
             int safeReward = Mathf.Max(0, baseReward);
             int safeLevel = Mathf.Max(1, level);
-            float levelMultiplier = 1f + (safeLevel - 1) * 0.25f;
+            float levelMultiplier =
+                1f +
+                (safeLevel - 1) *
+                Mathf.Max(0f, rewardIncreasePerLevel);
             return Mathf.Max(
                 safeReward,
                 Mathf.CeilToInt(safeReward * levelMultiplier));
@@ -386,7 +415,10 @@ namespace Game3.SideDefense
                 return false;
             }
 
-            projectile.Launch(target, attackDamage, projectileSpeed);
+            projectile.Launch(
+                target,
+                attackDamage * towerDamageMultiplier,
+                projectileSpeed);
             return true;
         }
 
