@@ -32,6 +32,8 @@ namespace Game3.SideDefense
 
         private float nextActionTime;
         private int appliedUpgradeLevel;
+        private float appliedHealthUpgradeMultiplier = 1f;
+        private float appliedPowerUpgradeMultiplier = 1f;
 
         public string DisplayName => displayName;
         public float MaxHealth => maxHealth;
@@ -74,6 +76,8 @@ namespace Game3.SideDefense
             detectionRange = Mathf.Max(attackRange + 0.5f, 2.2f);
             isMarching = false;
             appliedUpgradeLevel = 0;
+            appliedHealthUpgradeMultiplier = 1f;
+            appliedPowerUpgradeMultiplier = 1f;
             RefreshHealthBar();
         }
 
@@ -104,8 +108,8 @@ namespace Game3.SideDefense
 
         public void ApplyUpgradeLevel(
             int level,
-            float healthBonusPerLevel,
-            float powerBonusPerLevel)
+            float healthMultiplier,
+            float powerMultiplier)
         {
             int targetLevel = Mathf.Max(0, level);
             if (!IsAlive || targetLevel <= appliedUpgradeLevel)
@@ -113,23 +117,15 @@ namespace Game3.SideDefense
                 return;
             }
 
-            float safeHealthBonus = Mathf.Max(0f, healthBonusPerLevel);
-            float safePowerBonus = Mathf.Max(0f, powerBonusPerLevel);
-            float oldHealthMultiplier =
-                1f + appliedUpgradeLevel * safeHealthBonus;
-            float newHealthMultiplier =
-                1f + targetLevel * safeHealthBonus;
-            float oldPowerMultiplier =
-                1f + appliedUpgradeLevel * safePowerBonus;
-            float newPowerMultiplier =
-                1f + targetLevel * safePowerBonus;
+            float newHealthMultiplier = Mathf.Max(1f, healthMultiplier);
+            float newPowerMultiplier = Mathf.Max(1f, powerMultiplier);
 
             float previousMaxHealth = maxHealth;
             maxHealth = Mathf.Max(
                 1f,
                 maxHealth *
                 newHealthMultiplier /
-                Mathf.Max(0.01f, oldHealthMultiplier));
+                Mathf.Max(0.01f, appliedHealthUpgradeMultiplier));
             currentHealth = Mathf.Min(
                 maxHealth,
                 currentHealth + maxHealth - previousMaxHealth);
@@ -137,17 +133,19 @@ namespace Game3.SideDefense
                 0f,
                 attackDamage *
                 newPowerMultiplier /
-                Mathf.Max(0.01f, oldPowerMultiplier));
+                Mathf.Max(0.01f, appliedPowerUpgradeMultiplier));
             if (healsAllies)
             {
                 healAmount = Mathf.Max(
                     0f,
                     healAmount *
                     newPowerMultiplier /
-                    Mathf.Max(0.01f, oldPowerMultiplier));
+                    Mathf.Max(0.01f, appliedPowerUpgradeMultiplier));
             }
 
             appliedUpgradeLevel = targetLevel;
+            appliedHealthUpgradeMultiplier = newHealthMultiplier;
+            appliedPowerUpgradeMultiplier = newPowerMultiplier;
             RefreshHealthBar();
             HealthChanged?.Invoke(this);
         }

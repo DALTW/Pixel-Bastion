@@ -268,15 +268,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game3.SideDefense.SideDefenseHumanUnit
   displayName: Priest
-  maxHealth: 95
-  currentHealth: 95
+  maxHealth: 130
+  currentHealth: 130
   movementSpeed: 1.05
   attackDamage: 12
   attackInterval: 1.1
   attackRange: 2.8
   detectionRange: 3.3
   healsAllies: 1
-  healAmount: 20
+  healAmount: 28
   healRange: 2.8
   attackStyle: 1
   projectilePrefab: {fileID: 2630844023686645362, guid: 38babc09046f7e54e889d31d2beab01a, type: 3}

@@ -406,11 +406,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game3.SideDefense.SideDefenseHumanUnit
   displayName: Wizard
-  maxHealth: 80
-  currentHealth: 80
+  maxHealth: 115
+  currentHealth: 115
   movementSpeed: 1
-  attackDamage: 40
-  attackInterval: 1.25
+  attackDamage: 52
+  attackInterval: 1.2
   attackRange: 3.1
   detectionRange: 3.6
   attackStyle: 1
