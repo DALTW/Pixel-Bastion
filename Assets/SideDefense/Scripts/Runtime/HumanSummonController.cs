@@ -29,7 +29,7 @@ namespace Game3.SideDefense
         [SerializeField, Min(0f)] private float healthBonusPerLevel = 0.15f;
         [SerializeField, Min(0f)] private float powerBonusPerLevel = 0.15f;
         [SerializeField, Min(0f)] private float upgradeCostGrowthPerLevel = 0.5f;
-        [SerializeField, Min(0)] private int summonCostReductionPerUpgrade = 2;
+        [SerializeField, Min(0)] private int summonCostReductionPerUpgrade = 4;
 
         private HumanSummonCard selectedCard;
         private int currentCoins;
