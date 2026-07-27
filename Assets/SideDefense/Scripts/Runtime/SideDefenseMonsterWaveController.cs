@@ -34,7 +34,7 @@ namespace Game3.SideDefense
         [SerializeField, Min(0f)] private float initialSpawnDelay = 2f;
         [SerializeField, Min(0.25f)] private float baseSpawnInterval = 5.5f;
         [SerializeField, Min(0.25f)] private float minimumSpawnInterval = 1.5f;
-        [SerializeField, Min(1)] private int batchSpawningStartWave = 11;
+        [SerializeField, Min(1)] private int batchSpawningStartWave = 5;
         [SerializeField, Range(0, 100)] private int doubleSpawnChancePercent = 25;
         [SerializeField, Range(0, 100)] private int tripleSpawnChancePercent = 5;
         [SerializeField, Min(0f)] private float batchSpawnSpacing = 0.18f;

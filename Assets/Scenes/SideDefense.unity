@@ -8535,7 +8535,7 @@ MonoBehaviour:
   initialSpawnDelay: 2
   baseSpawnInterval: 5.5
   minimumSpawnInterval: 1.5
-  batchSpawningStartWave: 11
+  batchSpawningStartWave: 5
   doubleSpawnChancePercent: 25
   tripleSpawnChancePercent: 5
   batchSpawnSpacing: 0.18
