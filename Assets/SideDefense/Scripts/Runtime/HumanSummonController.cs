@@ -25,17 +25,23 @@ namespace Game3.SideDefense
         [SerializeField, Min(1)] private int maxActiveHumans = 24;
 
         [Header("Human Upgrades")]
-        [SerializeField, Min(1)] private int maxUpgradeLevel = 5;
+        [SerializeField, Min(1)] private int maxUpgradeLevel = 10;
+        [SerializeField, Min(1)] private int initiallyUnlockedUpgradeLevel = 5;
+        [SerializeField, Min(1)] private int earlyUpgradeLevelCap = 5;
         [SerializeField, Min(0f)] private float healthBonusPerLevel = 0.15f;
         [SerializeField, Min(0f)] private float powerBonusPerLevel = 0.15f;
+        [SerializeField, Min(0f)] private float lateHealthBonusPerLevel = 0.1f;
+        [SerializeField, Min(0f)] private float latePowerBonusPerLevel = 0.1f;
         [SerializeField, Min(0f)] private float upgradeCostGrowthPerLevel = 0.5f;
         [SerializeField, Min(0)] private int summonCostReductionPerUpgrade = 4;
+        [SerializeField, Min(0)] private int summonCostReductionLevelCap = 5;
 
         private HumanSummonCard selectedCard;
         private int currentCoins;
         private int[] upgradeLevels = Array.Empty<int>();
         private int[] humanUnlockOrder = Array.Empty<int>();
         private int unlockedHumanCount;
+        private int unlockedUpgradeLevel;
         private float passiveCoinElapsedTime;
         private bool gameInputEnabled = true;
         private Button upgradeMenuButton;
@@ -52,6 +58,7 @@ namespace Game3.SideDefense
         public HumanSummonCard SelectedCard => selectedCard;
         public bool GameInputEnabled => gameInputEnabled;
         public int MaxUpgradeLevel => maxUpgradeLevel;
+        public int UnlockedUpgradeLevel => unlockedUpgradeLevel;
         public int UnlockedHumanCount => unlockedHumanCount;
         public int ActiveHumanCount => CountActiveHumans();
         public int MaxActiveHumans => maxActiveHumans;
@@ -74,6 +81,10 @@ namespace Game3.SideDefense
         {
             currentCoins = Mathf.Max(0, startingCoins);
             upgradeLevels = new int[cards == null ? 0 : cards.Length];
+            unlockedUpgradeLevel = Mathf.Clamp(
+                initiallyUnlockedUpgradeLevel,
+                1,
+                maxUpgradeLevel);
             passiveCoinElapsedTime = 0f;
             gameInputEnabled = true;
             EnsureUpgradeUi();
@@ -197,8 +208,10 @@ namespace Game3.SideDefense
             {
                 humanUnit.ApplyUpgradeLevel(
                     GetUpgradeLevel(selectedCard),
-                    healthBonusPerLevel,
-                    powerBonusPerLevel);
+                    GetHealthUpgradeMultiplier(
+                        GetUpgradeLevel(selectedCard)),
+                    GetPowerUpgradeMultiplier(
+                        GetUpgradeLevel(selectedCard)));
                 humanUnit.BeginMarch(mapLayout.WorldRight - 1.2f);
             }
 
@@ -257,6 +270,22 @@ namespace Game3.SideDefense
             return true;
         }
 
+        public bool UnlockNextUpgradeLevel()
+        {
+            if (unlockedUpgradeLevel >= maxUpgradeLevel)
+            {
+                return false;
+            }
+
+            unlockedUpgradeLevel++;
+            Debug.Log(
+                $"Human upgrade level {unlockedUpgradeLevel} unlocked " +
+                "after boss clear.",
+                this);
+            RefreshUi();
+            return true;
+        }
+
         public int GetUpgradeLevel(HumanSummonCard card)
         {
             if (card == null)
@@ -292,10 +321,9 @@ namespace Game3.SideDefense
                 return 0;
             }
 
-            return Mathf.Max(
-                0,
-                card.CoinCost -
-                GetUpgradeLevel(card) * summonCostReductionPerUpgrade);
+            return GetSummonCostAtLevel(
+                card,
+                GetUpgradeLevel(card));
         }
 
         public void UpgradeSelected()
@@ -331,7 +359,59 @@ namespace Game3.SideDefense
             }
 
             return upgradeLevels[cardIndex] < maxUpgradeLevel &&
+                   upgradeLevels[cardIndex] < unlockedUpgradeLevel &&
                    currentCoins >= GetUpgradeCost(selectedCard);
+        }
+
+        private int GetSummonCostAtLevel(
+            HumanSummonCard card,
+            int level)
+        {
+            if (card == null)
+            {
+                return 0;
+            }
+
+            int discountedLevels = Mathf.Min(
+                Mathf.Max(0, level),
+                summonCostReductionLevelCap);
+            return Mathf.Max(
+                0,
+                card.CoinCost -
+                discountedLevels * summonCostReductionPerUpgrade);
+        }
+
+        private float GetHealthUpgradeMultiplier(int level)
+        {
+            return CalculateUpgradeMultiplier(
+                level,
+                healthBonusPerLevel,
+                lateHealthBonusPerLevel);
+        }
+
+        private float GetPowerUpgradeMultiplier(int level)
+        {
+            return CalculateUpgradeMultiplier(
+                level,
+                powerBonusPerLevel,
+                latePowerBonusPerLevel);
+        }
+
+        private float CalculateUpgradeMultiplier(
+            int level,
+            float earlyBonusPerLevel,
+            float lateBonusPerLevel)
+        {
+            int safeLevel = Mathf.Clamp(level, 0, maxUpgradeLevel);
+            int earlyLevels = Mathf.Min(
+                safeLevel,
+                earlyUpgradeLevelCap);
+            int lateLevels = Mathf.Max(
+                0,
+                safeLevel - earlyUpgradeLevelCap);
+            return 1f +
+                   earlyLevels * Mathf.Max(0f, earlyBonusPerLevel) +
+                   lateLevels * Mathf.Max(0f, lateBonusPerLevel);
         }
 
         private void ApplyUpgradeToActiveUnits(
@@ -355,8 +435,8 @@ namespace Game3.SideDefense
 
                 unit.ApplyUpgradeLevel(
                     level,
-                    healthBonusPerLevel,
-                    powerBonusPerLevel);
+                    GetHealthUpgradeMultiplier(level),
+                    GetPowerUpgradeMultiplier(level));
             }
         }
 
@@ -435,6 +515,10 @@ namespace Game3.SideDefense
             int currentLevel = GetUpgradeLevel(selectedCard);
             bool hasSelection =
                 selectedCard != null && selectedCard.IsUnlocked;
+            bool isMaxLevel = currentLevel >= maxUpgradeLevel;
+            bool isAtUnlockedCap =
+                !isMaxLevel &&
+                currentLevel >= unlockedUpgradeLevel;
 
             if (upgradeMenuButton != null)
             {
@@ -464,40 +548,65 @@ namespace Game3.SideDefense
             {
                 upgradeTitleLabel.text =
                     $"{selectedCard.DisplayName.ToUpperInvariant()}  " +
-                    $"LV {currentLevel}/{maxUpgradeLevel}";
+                    $"LV {currentLevel}/{maxUpgradeLevel}  " +
+                    $"CAP {unlockedUpgradeLevel}";
             }
 
             int currentHealthBonus =
-                Mathf.RoundToInt(currentLevel * healthBonusPerLevel * 100f);
+                Mathf.RoundToInt(
+                    (GetHealthUpgradeMultiplier(currentLevel) - 1f) *
+                    100f);
             int currentPowerBonus =
-                Mathf.RoundToInt(currentLevel * powerBonusPerLevel * 100f);
+                Mathf.RoundToInt(
+                    (GetPowerUpgradeMultiplier(currentLevel) - 1f) *
+                    100f);
             if (upgradeDetailsLabel != null)
             {
                 int currentSummonCost = GetSummonCost(selectedCard);
-                int nextSummonCost = Mathf.Max(
-                    0,
-                    selectedCard.CoinCost -
-                    (currentLevel + 1) *
-                    summonCostReductionPerUpgrade);
+                int nextLevel = Mathf.Min(
+                    maxUpgradeLevel,
+                    currentLevel + 1);
+                int nextSummonCost = GetSummonCostAtLevel(
+                    selectedCard,
+                    nextLevel);
+                int nextHealthBonus = Mathf.RoundToInt(
+                    (GetHealthUpgradeMultiplier(nextLevel) - 1f) *
+                    100f);
+                int nextPowerBonus = Mathf.RoundToInt(
+                    (GetPowerUpgradeMultiplier(nextLevel) - 1f) *
+                    100f);
+                string progressionText = isMaxLevel
+                    ? "THIS HUMAN HAS REACHED MAX LEVEL"
+                    : isAtUnlockedCap
+                        ? "NEXT LEVEL LOCKED - DEFEAT A LATE BOSS"
+                        : $"NEXT LEVEL  HP +{nextHealthBonus}%  |  " +
+                          $"POWER +{nextPowerBonus}%";
+                string summonCostText =
+                    $"\nSUMMON COST  {currentSummonCost}";
+                if (!isMaxLevel &&
+                    nextSummonCost != currentSummonCost)
+                {
+                    summonCostText += $"  >  {nextSummonCost}";
+                }
+                else if (currentLevel >= summonCostReductionLevelCap)
+                {
+                    summonCostText += "  (MAX DISCOUNT)";
+                }
+
                 upgradeDetailsLabel.text =
                     $"CURRENT  HP +{currentHealthBonus}%  |  " +
                     $"POWER +{currentPowerBonus}%\n" +
-                    (currentLevel >= maxUpgradeLevel
-                        ? "THIS HUMAN HAS REACHED MAX LEVEL"
-                        : $"NEXT LEVEL  HP +{Mathf.RoundToInt((currentLevel + 1) * healthBonusPerLevel * 100f)}%  |  " +
-                          $"POWER +{Mathf.RoundToInt((currentLevel + 1) * powerBonusPerLevel * 100f)}%") +
-                    $"\nSUMMON COST  {currentSummonCost}" +
-                    (currentLevel >= maxUpgradeLevel
-                        ? string.Empty
-                        : $"  >  {nextSummonCost}");
+                    progressionText +
+                    summonCostText;
             }
 
-            bool isMaxLevel = currentLevel >= maxUpgradeLevel;
             if (upgradeCostLabel != null)
             {
                 upgradeCostLabel.text = isMaxLevel
                     ? "MAX LEVEL"
-                    : $"COST  {GetUpgradeCost(selectedCard)} COINS";
+                    : isAtUnlockedCap
+                        ? $"LEVEL CAP {unlockedUpgradeLevel}"
+                        : $"COST  {GetUpgradeCost(selectedCard)} COINS";
             }
 
             if (confirmUpgradeButton != null)
@@ -508,7 +617,11 @@ namespace Game3.SideDefense
             if (confirmUpgradeLabel != null)
             {
                 confirmUpgradeLabel.text =
-                    isMaxLevel ? "MAX" : "UPGRADE";
+                    isMaxLevel
+                        ? "MAX"
+                        : isAtUnlockedCap
+                            ? "LOCKED"
+                            : "UPGRADE";
             }
         }
 
@@ -825,12 +938,28 @@ namespace Game3.SideDefense
                 Mathf.Max(1, initiallyUnlockedHumanTypes);
             maxActiveHumans = Mathf.Max(1, maxActiveHumans);
             maxUpgradeLevel = Mathf.Max(1, maxUpgradeLevel);
+            initiallyUnlockedUpgradeLevel = Mathf.Clamp(
+                initiallyUnlockedUpgradeLevel,
+                1,
+                maxUpgradeLevel);
+            earlyUpgradeLevelCap = Mathf.Clamp(
+                earlyUpgradeLevelCap,
+                1,
+                maxUpgradeLevel);
             healthBonusPerLevel = Mathf.Max(0f, healthBonusPerLevel);
             powerBonusPerLevel = Mathf.Max(0f, powerBonusPerLevel);
+            lateHealthBonusPerLevel =
+                Mathf.Max(0f, lateHealthBonusPerLevel);
+            latePowerBonusPerLevel =
+                Mathf.Max(0f, latePowerBonusPerLevel);
             upgradeCostGrowthPerLevel =
                 Mathf.Max(0f, upgradeCostGrowthPerLevel);
             summonCostReductionPerUpgrade =
                 Mathf.Max(0, summonCostReductionPerUpgrade);
+            summonCostReductionLevelCap = Mathf.Clamp(
+                summonCostReductionLevelCap,
+                0,
+                maxUpgradeLevel);
         }
     }
 }

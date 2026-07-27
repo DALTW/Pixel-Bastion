@@ -562,11 +562,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game3.SideDefense.SideDefenseHumanUnit
   displayName: Knight Templar
-  maxHealth: 210
-  currentHealth: 210
+  maxHealth: 300
+  currentHealth: 300
   movementSpeed: 0.85
-  attackDamage: 39
-  attackInterval: 1.05
+  attackDamage: 48
+  attackInterval: 1
   attackRange: 0.85
   detectionRange: 2.2
   attackStyle: 0

@@ -173,11 +173,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game3.SideDefense.SideDefenseHumanUnit
   displayName: Lancer
-  maxHealth: 125
-  currentHealth: 125
+  maxHealth: 160
+  currentHealth: 160
   movementSpeed: 1.25
-  attackDamage: 26
-  attackInterval: 1.05
+  attackDamage: 32
+  attackInterval: 1
   attackRange: 1.05
   detectionRange: 2.2
   attackStyle: 0

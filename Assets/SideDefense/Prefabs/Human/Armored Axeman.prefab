@@ -515,11 +515,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game3.SideDefense.SideDefenseHumanUnit
   displayName: Armored Axeman
-  maxHealth: 155
-  currentHealth: 155
+  maxHealth: 220
+  currentHealth: 220
   movementSpeed: 0.9
-  attackDamage: 34
-  attackInterval: 1.2
+  attackDamage: 40
+  attackInterval: 1.1
   attackRange: 0.82
   detectionRange: 2.2
   attackStyle: 0

@@ -24,15 +24,20 @@ namespace Game3.SideDefense
         [SerializeField, Min(1)] private int baseMonstersToDefeat = 10;
         [SerializeField, Min(1)] private int wavesPerMonsterIncrease = 5;
         [SerializeField, Min(1)] private int additionalMonstersPerIncrease = 1;
+        [SerializeField, Min(1)] private int firstLateUpgradeUnlockWave = 40;
 
         [Header("Wave Difficulty")]
-        [SerializeField, Min(0f)] private float healthGrowthPerWave = 0.12f;
-        [SerializeField, Min(0f)] private float damageGrowthPerWave = 0.08f;
+        [SerializeField, Min(0f)] private float healthGrowthPerWave = 0.1f;
+        [SerializeField, Min(0f)] private float damageGrowthPerWave = 0.05f;
 
         [Header("Spawn Timing")]
         [SerializeField, Min(0f)] private float initialSpawnDelay = 2f;
         [SerializeField, Min(0.25f)] private float baseSpawnInterval = 5.5f;
         [SerializeField, Min(0.25f)] private float minimumSpawnInterval = 1.5f;
+        [SerializeField, Min(1)] private int batchSpawningStartWave = 11;
+        [SerializeField, Range(0, 100)] private int doubleSpawnChancePercent = 25;
+        [SerializeField, Range(0, 100)] private int tripleSpawnChancePercent = 5;
+        [SerializeField, Min(0f)] private float batchSpawnSpacing = 0.18f;
 
         [Header("Boss Difficulty")]
         [SerializeField, Min(1f)] private float bossHealthMultiplier = 5f;
@@ -42,7 +47,8 @@ namespace Game3.SideDefense
         private float bossTowerDamageMultiplier = 0.68f;
 
         [Header("Coin Rewards")]
-        [SerializeField, Min(0f)] private float coinRewardIncreasePerWave = 0.1f;
+        [SerializeField, Min(0f)] private float coinRewardIncreasePerWave = 0.03f;
+        [SerializeField, Min(1)] private int bossCoinRewardMultiplier = 3;
 
         private float elapsedBattleTime;
         private float spawnCountdown;
@@ -136,10 +142,8 @@ namespace Game3.SideDefense
                 return;
             }
 
-            if (SpawnNormalMonster() != null)
-            {
-                currentWaveSpawnedMonsterCount++;
-            }
+            currentWaveSpawnedMonsterCount +=
+                SpawnNormalMonsterBatch();
 
             ScheduleNextMonsterSpawn();
         }
@@ -175,6 +179,54 @@ namespace Game3.SideDefense
             spawningEnabled = false;
         }
 
+        private int SpawnNormalMonsterBatch()
+        {
+            int remainingMonsterCount = Mathf.Max(
+                0,
+                MonstersToDefeatThisWave -
+                currentWaveSpawnedMonsterCount);
+            if (remainingMonsterCount <= 0)
+            {
+                return 0;
+            }
+
+            int requestedBatchSize = 1;
+            if (currentWave >= batchSpawningStartWave)
+            {
+                int roll = UnityEngine.Random.Range(0, 100);
+                if (roll < tripleSpawnChancePercent)
+                {
+                    requestedBatchSize = 3;
+                }
+                else if (roll <
+                         tripleSpawnChancePercent +
+                         doubleSpawnChancePercent)
+                {
+                    requestedBatchSize = 2;
+                }
+            }
+
+            int batchSize = Mathf.Min(
+                requestedBatchSize,
+                remainingMonsterCount);
+            int spawnedMonsterCount = 0;
+            for (int index = 0; index < batchSize; index++)
+            {
+                SideDefenseMonsterUnit monster =
+                    SpawnNormalMonster();
+                if (monster == null)
+                {
+                    continue;
+                }
+
+                monster.transform.position +=
+                    Vector3.right * (index * batchSpawnSpacing);
+                spawnedMonsterCount++;
+            }
+
+            return spawnedMonsterCount;
+        }
+
         private SideDefenseMonsterUnit SpawnNormalMonster()
         {
             int availableMonsterCount = Mathf.Clamp(
@@ -182,21 +234,29 @@ namespace Game3.SideDefense
                 1,
                 monsterPrefabs.Length);
             int strongestIndex = availableMonsterCount - 1;
+            int strongestSpawnChance =
+                GetStrongestMonsterSpawnChance();
+            int previousSpawnChance = Mathf.Min(
+                30,
+                100 - strongestSpawnChance);
 
             int roll = UnityEngine.Random.Range(0, 100);
             int selectedIndex;
-            if (roll < 50)
+            if (roll < strongestSpawnChance)
             {
                 selectedIndex = strongestIndex;
             }
-            else if (roll < 80)
+            else if (roll <
+                     strongestSpawnChance + previousSpawnChance)
             {
                 selectedIndex = Mathf.Max(0, strongestIndex - 1);
             }
             else
             {
                 selectedIndex =
-                    UnityEngine.Random.Range(0, availableMonsterCount);
+                    UnityEngine.Random.Range(
+                        0,
+                        Mathf.Max(1, strongestIndex));
             }
 
             return SpawnMonster(selectedIndex, false);
@@ -272,13 +332,17 @@ namespace Game3.SideDefense
             }
 
             monster.Died -= HandleMonsterDied;
+            bool wasActiveBoss = monster == activeBoss;
             if (humanSummonController != null &&
                 monster.WasDefeatedByHuman)
             {
-                humanSummonController.AddCoins(monster.CoinReward);
+                int rewardMultiplier =
+                    wasActiveBoss ? bossCoinRewardMultiplier : 1;
+                humanSummonController.AddCoins(
+                    monster.CoinReward * rewardMultiplier);
             }
 
-            if (monster == activeBoss)
+            if (wasActiveBoss)
             {
                 HandleBossDefeated();
                 return;
@@ -308,6 +372,10 @@ namespace Game3.SideDefense
                 Mathf.Min(monsterPrefabs.Length, bossIndex + 1));
             activeBoss = null;
             humanSummonController?.UnlockNextHuman();
+            if (currentWave >= firstLateUpgradeUnlockWave)
+            {
+                humanSummonController?.UnlockNextUpgradeLevel();
+            }
 
             if (currentWave >= maximumWave)
             {
@@ -351,6 +419,26 @@ namespace Game3.SideDefense
         private bool IsBossWave(int wave)
         {
             return wave > 0 && wave % bossWaveInterval == 0;
+        }
+
+        private int GetStrongestMonsterSpawnChance()
+        {
+            if (currentWave <= bossWaveInterval ||
+                unlockedMonsterCount <= initiallyUnlockedMonsterTypes)
+            {
+                return 50;
+            }
+
+            int wavesSinceBoss = currentWave % bossWaveInterval;
+            if (wavesSinceBoss <= 0)
+            {
+                return 50;
+            }
+
+            return Mathf.Clamp(
+                10 + wavesSinceBoss * 10,
+                20,
+                50);
         }
 
         private int GetBossMonsterIndex(int wave)
@@ -429,6 +517,8 @@ namespace Game3.SideDefense
                 Mathf.Max(1, wavesPerMonsterIncrease);
             additionalMonstersPerIncrease =
                 Mathf.Max(1, additionalMonstersPerIncrease);
+            firstLateUpgradeUnlockWave =
+                Mathf.Max(bossWaveInterval, firstLateUpgradeUnlockWave);
             healthGrowthPerWave = Mathf.Max(0f, healthGrowthPerWave);
             damageGrowthPerWave = Mathf.Max(0f, damageGrowthPerWave);
             initialSpawnDelay = Mathf.Max(0f, initialSpawnDelay);
@@ -438,6 +528,15 @@ namespace Game3.SideDefense
                     minimumSpawnInterval,
                     0.25f,
                     baseSpawnInterval);
+            batchSpawningStartWave =
+                Mathf.Max(1, batchSpawningStartWave);
+            tripleSpawnChancePercent =
+                Mathf.Clamp(tripleSpawnChancePercent, 0, 100);
+            doubleSpawnChancePercent = Mathf.Clamp(
+                doubleSpawnChancePercent,
+                0,
+                100 - tripleSpawnChancePercent);
+            batchSpawnSpacing = Mathf.Max(0f, batchSpawnSpacing);
             bossHealthMultiplier = Mathf.Max(1f, bossHealthMultiplier);
             bossDamageMultiplier = Mathf.Max(1f, bossDamageMultiplier);
             bossScaleMultiplier = Mathf.Max(1f, bossScaleMultiplier);
@@ -445,6 +544,8 @@ namespace Game3.SideDefense
                 Mathf.Clamp(bossTowerDamageMultiplier, 0.1f, 1f);
             coinRewardIncreasePerWave =
                 Mathf.Max(0f, coinRewardIncreasePerWave);
+            bossCoinRewardMultiplier =
+                Mathf.Max(1, bossCoinRewardMultiplier);
         }
     }
 }

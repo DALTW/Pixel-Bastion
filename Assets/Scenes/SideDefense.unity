@@ -7995,11 +7995,16 @@ MonoBehaviour:
   passiveCoinsPerSecond: 1
   initiallyUnlockedHumanTypes: 2
   maxActiveHumans: 24
-  maxUpgradeLevel: 5
+  maxUpgradeLevel: 10
+  initiallyUnlockedUpgradeLevel: 5
+  earlyUpgradeLevelCap: 5
   healthBonusPerLevel: 0.15
   powerBonusPerLevel: 0.15
+  lateHealthBonusPerLevel: 0.1
+  latePowerBonusPerLevel: 0.1
   upgradeCostGrowthPerLevel: 0.5
   summonCostReductionPerUpgrade: 4
+  summonCostReductionLevelCap: 5
 --- !u!114 &1890515165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8524,16 +8529,22 @@ MonoBehaviour:
   baseMonstersToDefeat: 10
   wavesPerMonsterIncrease: 5
   additionalMonstersPerIncrease: 1
-  healthGrowthPerWave: 0.12
-  damageGrowthPerWave: 0.08
+  firstLateUpgradeUnlockWave: 40
+  healthGrowthPerWave: 0.1
+  damageGrowthPerWave: 0.05
   initialSpawnDelay: 2
   baseSpawnInterval: 5.5
   minimumSpawnInterval: 1.5
+  batchSpawningStartWave: 11
+  doubleSpawnChancePercent: 25
+  tripleSpawnChancePercent: 5
+  batchSpawnSpacing: 0.18
   bossHealthMultiplier: 5
   bossDamageMultiplier: 1.6
   bossScaleMultiplier: 1.5
   bossTowerDamageMultiplier: 0.68
-  coinRewardIncreasePerWave: 0.1
+  coinRewardIncreasePerWave: 0.03
+  bossCoinRewardMultiplier: 3
 --- !u!4 &2051548459
 Transform:
   m_ObjectHideFlags: 0

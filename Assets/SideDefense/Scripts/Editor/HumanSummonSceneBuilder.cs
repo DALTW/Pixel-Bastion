@@ -64,7 +64,7 @@ namespace Game3.SideDefense.Editor
                 $"{HumanRoot}/Lancer/Lancer with shadows/Lancer-Idle.png",
                 $"{HumanRoot}/Lancer/Lancer with shadows/Lancer-Walk01.png",
                 115,
-                125f,
+                160f,
                 1.25f),
             new CharacterSpec(
                 "Armored Axeman",
@@ -73,21 +73,21 @@ namespace Game3.SideDefense.Editor
                 $"{HumanRoot}/Armored Axeman/Armored Axeman with shadows/" +
                 "Armored Axeman-Walk.png",
                 130,
-                155f,
+                220f,
                 0.9f),
             new CharacterSpec(
                 "Priest",
                 $"{HumanRoot}/Priest/Priest with shadows/Priest-Idle.png",
                 $"{HumanRoot}/Priest/Priest with shadows/Priest-Walk.png",
                 145,
-                95f,
+                130f,
                 1.05f),
             new CharacterSpec(
                 "Wizard",
                 $"{HumanRoot}/Wizard/Wizard with shadows/Wizard-Idle.png",
                 $"{HumanRoot}/Wizard/Wizard with shadows/Wizard-Walk.png",
                 160,
-                80f,
+                115f,
                 1f),
             new CharacterSpec(
                 "Knight Templar",
@@ -96,7 +96,7 @@ namespace Game3.SideDefense.Editor
                 $"{HumanRoot}/Knight Templar/Knight Templar with shadows/" +
                 "Knight Templar-Walk01.png",
                 170,
-                210f,
+                300f,
                 0.85f)
         };
 
@@ -270,7 +270,7 @@ namespace Game3.SideDefense.Editor
                     projectileOriginObject.transform);
                 if (spec.DisplayName == "Priest")
                 {
-                    unit.ConfigureHealing(20f, attackRange);
+                    unit.ConfigureHealing(28f, attackRange);
                 }
 
                 GameObject healthBarAnchor = new GameObject("HP Bar Anchor");
@@ -385,13 +385,13 @@ namespace Game3.SideDefense.Editor
                     attackInterval = 0.95f;
                     break;
                 case "Lancer":
-                    damage = 26f;
-                    attackInterval = 1.05f;
+                    damage = 32f;
+                    attackInterval = 1f;
                     attackRange = 1.05f;
                     break;
                 case "Armored Axeman":
-                    damage = 34f;
-                    attackInterval = 1.2f;
+                    damage = 40f;
+                    attackInterval = 1.1f;
                     attackRange = 0.82f;
                     break;
                 case "Priest":
@@ -400,13 +400,13 @@ namespace Game3.SideDefense.Editor
                     attackRange = 2.8f;
                     break;
                 case "Wizard":
-                    damage = 40f;
-                    attackInterval = 1.25f;
+                    damage = 52f;
+                    attackInterval = 1.2f;
                     attackRange = 3.1f;
                     break;
                 case "Knight Templar":
-                    damage = 39f;
-                    attackInterval = 1.05f;
+                    damage = 48f;
+                    attackInterval = 1f;
                     attackRange = 0.85f;
                     break;
             }
