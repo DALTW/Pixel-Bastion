@@ -275,6 +275,9 @@ MonoBehaviour:
   attackInterval: 1.1
   attackRange: 2.8
   detectionRange: 3.3
+  healsAllies: 1
+  healAmount: 20
+  healRange: 2.8
   attackStyle: 1
   projectilePrefab: {fileID: 2630844023686645362, guid: 38babc09046f7e54e889d31d2beab01a, type: 3}
   projectileSpeed: 6.2

@@ -2098,7 +2098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game3.SideDefense.HumanSummonCard
   displayName: Swordsman
-  coinCost: 85
+  coinCost: 95
   humanPrefab: {fileID: 8248720545034863651, guid: 3807c3e56f968b84d87f2572aa4b5486, type: 3}
   button: {fileID: 434828110}
   selectionOutline: {fileID: 434828109}
@@ -5491,8 +5491,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -12, y: 12}
-  m_SizeDelta: {x: 132, y: 126}
+  m_AnchoredPosition: {x: -12, y: 54}
+  m_SizeDelta: {x: 132, y: 84}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1243895442
 MonoBehaviour:
@@ -7992,6 +7992,14 @@ MonoBehaviour:
   - {fileID: 1266788914}
   - {fileID: 32103866}
   startingCoins: 200
+  passiveCoinsPerSecond: 1
+  initiallyUnlockedHumanTypes: 2
+  maxActiveHumans: 24
+  maxUpgradeLevel: 5
+  healthBonusPerLevel: 0.15
+  powerBonusPerLevel: 0.15
+  upgradeCostGrowthPerLevel: 0.5
+  summonCostReductionPerUpgrade: 2
 --- !u!114 &1890515165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8510,10 +8518,22 @@ MonoBehaviour:
   - {fileID: 5813433647584312738, guid: a8ea32aa8fb974340a71adbae02c8703, type: 3}
   - {fileID: 2951384256998486866, guid: 1b17d49b3fe9a574197668e0f114b636, type: 3}
   waveLabel: {fileID: 1097667926}
-  secondsPerWave: 30
+  maximumWave: 100
+  bossWaveInterval: 10
+  initiallyUnlockedMonsterTypes: 2
+  baseMonstersToDefeat: 10
+  wavesPerMonsterIncrease: 5
+  additionalMonstersPerIncrease: 1
+  healthGrowthPerWave: 0.12
+  damageGrowthPerWave: 0.08
   initialSpawnDelay: 2
   baseSpawnInterval: 5.5
   minimumSpawnInterval: 1.5
+  bossHealthMultiplier: 5
+  bossDamageMultiplier: 1.6
+  bossScaleMultiplier: 1.5
+  bossTowerDamageMultiplier: 0.68
+  coinRewardIncreasePerWave: 0.1
 --- !u!4 &2051548459
 Transform:
   m_ObjectHideFlags: 0

@@ -22,6 +22,7 @@ namespace Game3.SideDefense
         private float movementSpeed;
         private float remainingLifetime;
         private bool damageComesFromHuman;
+        private bool healsHumanTarget;
 
         public bool HasTarget =>
             monsterTarget != null ||
@@ -55,6 +56,16 @@ namespace Game3.SideDefense
         {
             humanTarget = target;
             ConfigureLaunch(attackDamage, speed);
+        }
+
+        public void LaunchHealing(
+            SideDefenseHumanUnit target,
+            float healingAmount,
+            float speed)
+        {
+            humanTarget = target;
+            healsHumanTarget = true;
+            ConfigureLaunch(healingAmount, speed);
         }
 
         public void Launch(
@@ -157,7 +168,15 @@ namespace Game3.SideDefense
 
             if (humanTarget != null && humanTarget.IsAlive)
             {
-                humanTarget.TakeDamage(damage);
+                if (healsHumanTarget)
+                {
+                    humanTarget.Heal(damage);
+                }
+                else
+                {
+                    humanTarget.TakeDamage(damage);
+                }
+
                 return;
             }
 
