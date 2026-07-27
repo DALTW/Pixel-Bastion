@@ -7999,7 +7999,7 @@ MonoBehaviour:
   healthBonusPerLevel: 0.15
   powerBonusPerLevel: 0.15
   upgradeCostGrowthPerLevel: 0.5
-  summonCostReductionPerUpgrade: 2
+  summonCostReductionPerUpgrade: 4
 --- !u!114 &1890515165
 MonoBehaviour:
   m_ObjectHideFlags: 0
