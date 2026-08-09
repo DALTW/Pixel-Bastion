@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game3.SideDefense
 {
@@ -19,10 +20,29 @@ namespace Game3.SideDefense
             RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void CreateForSideDefenseScene()
         {
-            SideDefenseMonsterWaveController waveController =
-                FindAnyObjectByType<SideDefenseMonsterWaveController>();
+            Scene activeScene = SceneManager.GetActiveScene();
+            SideDefenseMonsterWaveController waveController = null;
+            SideDefenseMonsterWaveController[] controllers =
+                FindObjectsByType<SideDefenseMonsterWaveController>();
+            foreach (SideDefenseMonsterWaveController controller in controllers)
+            {
+                if (controller != null &&
+                    controller.gameObject.scene == activeScene)
+                {
+                    waveController = controller;
+                    break;
+                }
+            }
+
+            EnsureFor(waveController);
+        }
+
+        public static void EnsureFor(
+            SideDefenseMonsterWaveController waveController)
+        {
             if (waveController == null ||
-                FindAnyObjectByType<SideDefenseBackgroundMusic>() != null)
+                waveController.GetComponentInChildren<
+                    SideDefenseBackgroundMusic>(true) != null)
             {
                 return;
             }
@@ -98,7 +118,8 @@ namespace Game3.SideDefense
                 Mathf.Lerp(
                     0f,
                     TargetVolume,
-                    Mathf.Clamp01(fadeElapsedTime / FadeInDuration));
+                    Mathf.Clamp01(fadeElapsedTime / FadeInDuration)) *
+                SideDefenseOptionsSettings.SoundVolume;
         }
     }
 }

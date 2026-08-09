@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -177,6 +178,139 @@ namespace Game3.SideDefense
         public void StopSpawning()
         {
             spawningEnabled = false;
+        }
+
+        public SideDefenseWaveSaveData CaptureSaveData()
+        {
+            List<SideDefenseSavedMonsterUnit> savedMonsters =
+                new List<SideDefenseSavedMonsterUnit>();
+            IReadOnlyList<SideDefenseMonsterUnit> activeMonsters =
+                SideDefenseMonsterUnit.ActiveUnits;
+            for (int index = 0; index < activeMonsters.Count; index++)
+            {
+                SideDefenseMonsterUnit monster = activeMonsters[index];
+                if (monster == null || !monster.IsAlive)
+                {
+                    continue;
+                }
+
+                Vector3 position = monster.transform.position;
+                savedMonsters.Add(new SideDefenseSavedMonsterUnit
+                {
+                    displayName = monster.DisplayName,
+                    currentHealth = monster.CurrentHealth,
+                    positionX = position.x,
+                    positionY = position.y,
+                    isBoss = monster == activeBoss
+                });
+            }
+
+            return new SideDefenseWaveSaveData
+            {
+                currentWave = currentWave,
+                elapsedBattleTime = elapsedBattleTime,
+                spawnCountdown = spawnCountdown,
+                unlockedMonsterCount = unlockedMonsterCount,
+                spawnedMonsterCount = currentWaveSpawnedMonsterCount,
+                defeatedMonsterCount = currentWaveDefeatedMonsterCount,
+                bossSpawnedThisWave = bossSpawnedThisWave,
+                activeMonsters = savedMonsters.ToArray()
+            };
+        }
+
+        public void RestoreSaveData(SideDefenseWaveSaveData data)
+        {
+            if (data == null)
+            {
+                return;
+            }
+
+            currentWave = Mathf.Clamp(data.currentWave, 1, maximumWave);
+            elapsedBattleTime = Mathf.Max(0f, data.elapsedBattleTime);
+            spawnCountdown = Mathf.Max(0f, data.spawnCountdown);
+            unlockedMonsterCount = Mathf.Clamp(
+                data.unlockedMonsterCount,
+                1,
+                Mathf.Max(1, monsterPrefabs.Length));
+            currentWaveSpawnedMonsterCount = Mathf.Clamp(
+                data.spawnedMonsterCount,
+                0,
+                MonstersToDefeatThisWave);
+            currentWaveDefeatedMonsterCount = Mathf.Clamp(
+                data.defeatedMonsterCount,
+                0,
+                MonstersToDefeatThisWave);
+            spawningEnabled = true;
+            allWavesCleared = false;
+            bossSpawnedThisWave = false;
+            activeBoss = null;
+
+            RestoreActiveMonsters(data.activeMonsters);
+            bossSpawnedThisWave = activeBoss != null;
+            RefreshWaveLabel();
+        }
+
+        private void RestoreActiveMonsters(
+            SideDefenseSavedMonsterUnit[] savedMonsters)
+        {
+            if (savedMonsters == null || mapLayout == null)
+            {
+                return;
+            }
+
+            foreach (SideDefenseSavedMonsterUnit savedMonster in savedMonsters)
+            {
+                if (savedMonster == null || savedMonster.currentHealth <= 0f)
+                {
+                    continue;
+                }
+
+                int prefabIndex =
+                    FindMonsterPrefabIndex(savedMonster.displayName);
+                SideDefenseMonsterUnit monster =
+                    SpawnMonster(prefabIndex, savedMonster.isBoss);
+                if (monster == null)
+                {
+                    continue;
+                }
+
+                monster.transform.position = new Vector3(
+                    savedMonster.positionX,
+                    savedMonster.positionY,
+                    monster.transform.position.z);
+                monster.RestoreHealth(savedMonster.currentHealth);
+                if (savedMonster.isBoss)
+                {
+                    activeBoss = monster;
+                }
+            }
+        }
+
+        private int FindMonsterPrefabIndex(string displayName)
+        {
+            if (monsterPrefabs == null ||
+                string.IsNullOrWhiteSpace(displayName))
+            {
+                return -1;
+            }
+
+            for (int index = 0; index < monsterPrefabs.Length; index++)
+            {
+                GameObject prefab = monsterPrefabs[index];
+                SideDefenseMonsterUnit monster = prefab == null
+                    ? null
+                    : prefab.GetComponent<SideDefenseMonsterUnit>();
+                if (monster != null &&
+                    string.Equals(
+                        monster.DisplayName,
+                        displayName,
+                        StringComparison.Ordinal))
+                {
+                    return index;
+                }
+            }
+
+            return -1;
         }
 
         private int SpawnNormalMonsterBatch()

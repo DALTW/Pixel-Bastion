@@ -66,6 +66,13 @@ namespace Game3.SideDefense
             HealthChanged?.Invoke(this);
         }
 
+        public void RestoreHealth(float savedHealth)
+        {
+            currentHealth = Mathf.Clamp(savedHealth, 1f, maxHealth);
+            RefreshHealthBar();
+            HealthChanged?.Invoke(this);
+        }
+
         private void Awake()
         {
             if (healthBar == null)

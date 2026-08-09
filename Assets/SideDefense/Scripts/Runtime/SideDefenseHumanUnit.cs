@@ -424,7 +424,12 @@ namespace Game3.SideDefense
                 return;
             }
 
-            currentHealth = Mathf.Max(0f, currentHealth - damage);
+            float appliedDamage = Mathf.Min(currentHealth, damage);
+            currentHealth = Mathf.Max(0f, currentHealth - appliedDamage);
+            SideDefenseDamageNumber.Show(
+                transform.position,
+                appliedDamage,
+                true);
             RefreshHealthBar();
             HealthChanged?.Invoke(this);
 
@@ -453,6 +458,13 @@ namespace Game3.SideDefense
             }
 
             currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+            RefreshHealthBar();
+            HealthChanged?.Invoke(this);
+        }
+
+        public void RestoreHealth(float savedHealth)
+        {
+            currentHealth = Mathf.Clamp(savedHealth, 1f, maxHealth);
             RefreshHealthBar();
             HealthChanged?.Invoke(this);
         }
