@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace Game3.SideDefense
 {
@@ -8,7 +11,13 @@ namespace Game3.SideDefense
     public sealed class SideDefenseGameFlow : MonoBehaviour
     {
         private const string TitleScreenResourcePath =
-            "UI/PixelBastionTitleScreen";
+            "UI/PixelBastionTitleScreenClean";
+        private const string StartButtonResourcePath =
+            "UI/PixelBastionStartButton";
+        private const string ContinueButtonResourcePath =
+            "UI/PixelBastionContinueButton";
+        private const string OptionsButtonResourcePath =
+            "UI/PixelBastionOptionsButton";
 
         [SerializeField] private SideDefenseTower alliedTower;
         [SerializeField] private SideDefenseMonsterWaveController waveController;
@@ -19,12 +28,18 @@ namespace Game3.SideDefense
         private bool isDefeated;
         private bool isVictorious;
         private bool isWaitingToStart;
+        private bool isPaused;
         private GameObject titleScreenOverlay;
         private Button startGameButton;
+        private Button continueGameButton;
+        private Button optionsMenuButton;
+        private SideDefenseOptionsMenu optionsMenu;
+        private SideDefensePauseMenu pauseMenu;
 
         public bool IsDefeated => isDefeated;
         public bool IsVictorious => isVictorious;
         public bool IsWaitingToStart => isWaitingToStart;
+        public bool IsPaused => isPaused;
 
         public void Configure(
             SideDefenseTower tower,
@@ -42,10 +57,15 @@ namespace Game3.SideDefense
 
         private void Awake()
         {
+            SideDefenseOptionsSettings.Changed -= HandleOptionsChanged;
+            SideDefenseOptionsSettings.Changed += HandleOptionsChanged;
             Time.timeScale = 0f;
             isDefeated = false;
             isVictorious = false;
             isWaitingToStart = true;
+            isPaused = false;
+
+            SideDefenseBackgroundMusic.EnsureFor(waveController);
 
             if (defeatOverlay != null)
             {
@@ -79,6 +99,34 @@ namespace Game3.SideDefense
             }
         }
 
+        private void Update()
+        {
+            if (!WasEscapePressed())
+            {
+                return;
+            }
+
+            if (optionsMenu != null && optionsMenu.IsVisible)
+            {
+                optionsMenu.Hide();
+                return;
+            }
+
+            if (isWaitingToStart || isDefeated || isVictorious)
+            {
+                return;
+            }
+
+            if (isPaused)
+            {
+                ResumeGame();
+            }
+            else
+            {
+                PauseGame();
+            }
+        }
+
         private void OnDestroy()
         {
             if (alliedTower != null)
@@ -100,6 +148,19 @@ namespace Game3.SideDefense
             {
                 startGameButton.onClick.RemoveListener(StartBattle);
             }
+
+            if (continueGameButton != null)
+            {
+                continueGameButton.onClick.RemoveListener(
+                    ContinueSavedGame);
+            }
+
+            if (optionsMenuButton != null)
+            {
+                optionsMenuButton.onClick.RemoveListener(OpenOptionsMenu);
+            }
+
+            SideDefenseOptionsSettings.Changed -= HandleOptionsChanged;
         }
 
         private void HandleTowerDestroyed(SideDefenseTower tower)
@@ -120,13 +181,108 @@ namespace Game3.SideDefense
             }
 
             isWaitingToStart = false;
+            isPaused = false;
             if (titleScreenOverlay != null)
             {
                 titleScreenOverlay.SetActive(false);
             }
 
+            optionsMenu?.Hide();
+            pauseMenu?.Hide();
             humanSummonController?.SetGameInputEnabled(true);
+            Time.timeScale = SideDefenseOptionsSettings.GameplaySpeed;
+        }
+
+        private void PauseGame()
+        {
+            if (isWaitingToStart || isDefeated || isVictorious || isPaused)
+            {
+                return;
+            }
+
+            isPaused = true;
+            humanSummonController?.SetGameInputEnabled(false);
+            Time.timeScale = 0f;
+            pauseMenu?.Show();
+        }
+
+        private void ResumeGame()
+        {
+            if (!isPaused)
+            {
+                return;
+            }
+
+            isPaused = false;
+            optionsMenu?.Hide();
+            pauseMenu?.Hide();
+            humanSummonController?.SetGameInputEnabled(true);
+            Time.timeScale = SideDefenseOptionsSettings.GameplaySpeed;
+        }
+
+        private void SaveGameAndReturnToTitle()
+        {
+            if (!isPaused)
+            {
+                return;
+            }
+
+            if (!SideDefenseSaveSystem.Save(
+                    alliedTower,
+                    waveController,
+                    humanSummonController))
+            {
+                Debug.LogWarning("Unable to save the current battle.", this);
+                return;
+            }
+
             Time.timeScale = 1f;
+            Scene activeScene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(activeScene.name);
+        }
+
+        private void ContinueSavedGame()
+        {
+            if (!isWaitingToStart ||
+                !SideDefenseSaveSystem.TryLoad(out SideDefenseSaveData data))
+            {
+                return;
+            }
+
+            Time.timeScale = 0f;
+            alliedTower?.RestoreHealth(data.towerHealth);
+            humanSummonController?.RestoreSaveData(data.human);
+            waveController?.RestoreSaveData(data.wave);
+
+            isWaitingToStart = false;
+            isPaused = false;
+            isDefeated = false;
+            isVictorious = false;
+            if (titleScreenOverlay != null)
+            {
+                titleScreenOverlay.SetActive(false);
+            }
+
+            optionsMenu?.Hide();
+            pauseMenu?.Hide();
+            humanSummonController?.SetGameInputEnabled(true);
+            Time.timeScale = SideDefenseOptionsSettings.GameplaySpeed;
+        }
+
+        private void OpenOptionsMenu()
+        {
+            optionsMenu?.Show();
+        }
+
+        private void HandleOptionsChanged()
+        {
+            if (!isWaitingToStart &&
+                !isDefeated &&
+                !isVictorious &&
+                Time.timeScale > 0f)
+            {
+                Time.timeScale = SideDefenseOptionsSettings.GameplaySpeed;
+            }
         }
 
         public void TriggerDefeat()
@@ -137,6 +293,9 @@ namespace Game3.SideDefense
             }
 
             isDefeated = true;
+            isPaused = false;
+            optionsMenu?.Hide();
+            pauseMenu?.Hide();
             waveController?.StopSpawning();
             humanSummonController?.SetGameInputEnabled(false);
 
@@ -157,6 +316,9 @@ namespace Game3.SideDefense
             }
 
             isVictorious = true;
+            isPaused = false;
+            optionsMenu?.Hide();
+            pauseMenu?.Hide();
             waveController?.StopSpawning();
             humanSummonController?.SetGameInputEnabled(false);
             ConfigureVictoryOverlay();
@@ -213,6 +375,12 @@ namespace Game3.SideDefense
                 : defeatOverlay.GetComponentInParent<Canvas>();
             Texture2D artwork =
                 Resources.Load<Texture2D>(TitleScreenResourcePath);
+            Texture2D startButtonArtwork =
+                Resources.Load<Texture2D>(StartButtonResourcePath);
+            Texture2D continueButtonArtwork =
+                Resources.Load<Texture2D>(ContinueButtonResourcePath);
+            Texture2D optionsButtonArtwork =
+                Resources.Load<Texture2D>(OptionsButtonResourcePath);
             if (canvas == null || artwork == null)
             {
                 Debug.LogWarning(
@@ -221,12 +389,15 @@ namespace Game3.SideDefense
                         : $"Missing title artwork at Resources/{TitleScreenResourcePath}.",
                     this);
                 isWaitingToStart = false;
-                Time.timeScale = 1f;
+                Time.timeScale = SideDefenseOptionsSettings.GameplaySpeed;
                 return;
             }
 
             artwork.filterMode = FilterMode.Point;
             artwork.wrapMode = TextureWrapMode.Clamp;
+            ConfigureMenuTexture(startButtonArtwork);
+            ConfigureMenuTexture(continueButtonArtwork);
+            ConfigureMenuTexture(optionsButtonArtwork);
 
             titleScreenOverlay = new GameObject(
                 "Pixel Bastion Title Screen",
@@ -266,17 +437,144 @@ namespace Game3.SideDefense
             aspectFitter.aspectRatio =
                 (float)artwork.width / Mathf.Max(1, artwork.height);
 
-            startGameButton = CreateStartButton(artworkRect);
+            Vector2 commonButtonAnchorMin = new Vector2(0.409f, 0f);
+            Vector2 commonButtonAnchorMax = new Vector2(0.591f, 0f);
+
+            Vector2 startAnchorMin = new Vector2(
+                commonButtonAnchorMin.x,
+                0.315f);
+            Vector2 startAnchorMax = new Vector2(
+                commonButtonAnchorMax.x,
+                0.445f);
+            CreateDecorativeButtonArtwork(
+                artworkRect,
+                startButtonArtwork,
+                "START GAME Button Artwork",
+                startAnchorMin,
+                startAnchorMax);
+            startGameButton = CreateMenuHitAreaButton(
+                artworkRect,
+                "START GAME Hit Area",
+                startAnchorMin,
+                startAnchorMax);
             startGameButton.onClick.RemoveListener(StartBattle);
             startGameButton.onClick.AddListener(StartBattle);
+
+            Vector2 continueAnchorMin = new Vector2(
+                commonButtonAnchorMin.x,
+                0.175f);
+            Vector2 continueAnchorMax = new Vector2(
+                commonButtonAnchorMax.x,
+                0.305f);
+            RawImage continueArtworkImage =
+                CreateDecorativeButtonArtwork(
+                artworkRect,
+                continueButtonArtwork,
+                "CONTINUE Button Artwork",
+                continueAnchorMin,
+                continueAnchorMax);
+            bool hasSavedGame = SideDefenseSaveSystem.HasSave;
+            if (continueArtworkImage != null && !hasSavedGame)
+            {
+                continueArtworkImage.color =
+                    new Color(0.45f, 0.5f, 0.55f, 1f);
+            }
+
+            continueGameButton = CreateMenuHitAreaButton(
+                artworkRect,
+                "CONTINUE Hit Area",
+                continueAnchorMin,
+                continueAnchorMax);
+            continueGameButton.interactable = hasSavedGame;
+            continueGameButton.onClick.RemoveListener(ContinueSavedGame);
+            continueGameButton.onClick.AddListener(ContinueSavedGame);
+
+            CreateDecorativeButtonArtwork(
+                artworkRect,
+                optionsButtonArtwork,
+                "OPTIONS Button Artwork",
+                new Vector2(commonButtonAnchorMin.x, 0.035f),
+                new Vector2(commonButtonAnchorMax.x, 0.165f));
+            optionsMenuButton = CreateMenuHitAreaButton(
+                artworkRect,
+                "OPTIONS Hit Area",
+                new Vector2(commonButtonAnchorMin.x, 0.035f),
+                new Vector2(commonButtonAnchorMax.x, 0.165f));
+            optionsMenuButton.onClick.RemoveListener(OpenOptionsMenu);
+            optionsMenuButton.onClick.AddListener(OpenOptionsMenu);
+
+            optionsMenu = SideDefenseOptionsMenu.Create(
+                canvas.transform);
+            pauseMenu = SideDefensePauseMenu.Create(
+                canvas.transform,
+                OpenOptionsMenu,
+                SaveGameAndReturnToTitle);
 
             titleScreenOverlay.transform.SetAsLastSibling();
         }
 
-        private static Button CreateStartButton(RectTransform parent)
+        private static void ConfigureMenuTexture(Texture2D texture)
+        {
+            if (texture == null)
+            {
+                return;
+            }
+
+            texture.filterMode = FilterMode.Point;
+            texture.wrapMode = TextureWrapMode.Clamp;
+        }
+
+        private static RawImage CreateDecorativeButtonArtwork(
+            RectTransform parent,
+            Texture2D texture,
+            string objectName,
+            Vector2 anchorMin,
+            Vector2 anchorMax)
+        {
+            if (texture == null)
+            {
+                Debug.LogWarning($"Missing menu artwork: {objectName}.");
+                return null;
+            }
+
+            GameObject artworkObject = new GameObject(
+                objectName,
+                typeof(RectTransform),
+                typeof(RawImage));
+            artworkObject.transform.SetParent(parent, false);
+
+            RectTransform rect =
+                artworkObject.GetComponent<RectTransform>();
+            rect.anchorMin = anchorMin;
+            rect.anchorMax = anchorMax;
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+
+            RawImage image = artworkObject.GetComponent<RawImage>();
+            image.texture = texture;
+            image.raycastTarget = false;
+            return image;
+        }
+
+        private static bool WasEscapePressed()
+        {
+#if ENABLE_INPUT_SYSTEM
+            return Keyboard.current != null &&
+                   Keyboard.current.escapeKey.wasPressedThisFrame;
+#else
+            return Input.GetKeyDown(KeyCode.Escape);
+#endif
+        }
+
+        private static Button CreateMenuHitAreaButton(
+            RectTransform parent,
+            string objectName,
+            Vector2 anchorMin,
+            Vector2 anchorMax)
         {
             GameObject buttonObject = new GameObject(
-                "START GAME Hit Area",
+                objectName,
                 typeof(RectTransform),
                 typeof(Image),
                 typeof(Button));
@@ -284,8 +582,8 @@ namespace Game3.SideDefense
 
             RectTransform rect =
                 buttonObject.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.355f, 0.285f);
-            rect.anchorMax = new Vector2(0.655f, 0.47f);
+            rect.anchorMin = anchorMin;
+            rect.anchorMax = anchorMax;
             rect.pivot = new Vector2(0.5f, 0.5f);
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;

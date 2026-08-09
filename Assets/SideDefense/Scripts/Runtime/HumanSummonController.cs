@@ -451,6 +451,175 @@ namespace Game3.SideDefense
             RefreshUi();
         }
 
+        public SideDefenseHumanSaveData CaptureSaveData()
+        {
+            List<SideDefenseSavedHumanUnit> savedHumans =
+                new List<SideDefenseSavedHumanUnit>();
+            IReadOnlyList<SideDefenseHumanUnit> activeUnits =
+                SideDefenseHumanUnit.ActiveUnits;
+            for (int index = 0; index < activeUnits.Count; index++)
+            {
+                SideDefenseHumanUnit unit = activeUnits[index];
+                if (unit == null || !unit.IsAlive)
+                {
+                    continue;
+                }
+
+                Vector3 position = unit.transform.position;
+                savedHumans.Add(new SideDefenseSavedHumanUnit
+                {
+                    displayName = unit.DisplayName,
+                    currentHealth = unit.CurrentHealth,
+                    positionX = position.x,
+                    positionY = position.y,
+                    upgradeLevel = unit.UpgradeLevel
+                });
+            }
+
+            return new SideDefenseHumanSaveData
+            {
+                currentCoins = currentCoins,
+                unlockedHumanCount = unlockedHumanCount,
+                unlockedUpgradeLevel = unlockedUpgradeLevel,
+                upgradeLevels = upgradeLevels == null
+                    ? Array.Empty<int>()
+                    : (int[])upgradeLevels.Clone(),
+                passiveCoinElapsedTime = passiveCoinElapsedTime,
+                selectedHumanName = selectedCard == null
+                    ? string.Empty
+                    : selectedCard.DisplayName,
+                activeHumans = savedHumans.ToArray()
+            };
+        }
+
+        public void RestoreSaveData(SideDefenseHumanSaveData data)
+        {
+            if (data == null)
+            {
+                return;
+            }
+
+            currentCoins = Mathf.Max(0, data.currentCoins);
+            passiveCoinElapsedTime =
+                Mathf.Max(0f, data.passiveCoinElapsedTime);
+            unlockedUpgradeLevel = Mathf.Clamp(
+                data.unlockedUpgradeLevel,
+                1,
+                maxUpgradeLevel);
+
+            int cardCount = cards == null ? 0 : cards.Length;
+            upgradeLevels = new int[cardCount];
+            if (data.upgradeLevels != null)
+            {
+                int copiedCount = Mathf.Min(
+                    upgradeLevels.Length,
+                    data.upgradeLevels.Length);
+                for (int index = 0; index < copiedCount; index++)
+                {
+                    upgradeLevels[index] = Mathf.Clamp(
+                        data.upgradeLevels[index],
+                        0,
+                        maxUpgradeLevel);
+                }
+            }
+
+            BuildHumanUnlockOrder();
+            unlockedHumanCount = Mathf.Clamp(
+                data.unlockedHumanCount,
+                humanUnlockOrder.Length > 0 ? 1 : 0,
+                humanUnlockOrder.Length);
+            ApplyHumanUnlockStates();
+
+            HumanSummonCard restoredSelection =
+                FindCardByDisplayName(data.selectedHumanName);
+            if (restoredSelection == null || !restoredSelection.IsUnlocked)
+            {
+                restoredSelection = humanUnlockOrder.Length > 0
+                    ? cards[humanUnlockOrder[0]]
+                    : null;
+            }
+
+            if (restoredSelection != null)
+            {
+                SelectCard(restoredSelection);
+            }
+
+            RestoreActiveHumans(data.activeHumans);
+            RefreshUi();
+        }
+
+        private void RestoreActiveHumans(
+            SideDefenseSavedHumanUnit[] savedHumans)
+        {
+            if (savedHumans == null || mapLayout == null)
+            {
+                return;
+            }
+
+            foreach (SideDefenseSavedHumanUnit savedHuman in savedHumans)
+            {
+                if (savedHuman == null || savedHuman.currentHealth <= 0f)
+                {
+                    continue;
+                }
+
+                HumanSummonCard card =
+                    FindCardByDisplayName(savedHuman.displayName);
+                if (card == null || card.HumanPrefab == null)
+                {
+                    continue;
+                }
+
+                GameObject instance = mapLayout.SpawnHuman(card.HumanPrefab);
+                instance.name = $"{card.DisplayName} (Human)";
+                instance.SetActive(true);
+
+                SideDefenseHumanUnit humanUnit =
+                    instance.GetComponent<SideDefenseHumanUnit>();
+                if (humanUnit == null)
+                {
+                    continue;
+                }
+
+                int level = Mathf.Clamp(
+                    savedHuman.upgradeLevel,
+                    0,
+                    maxUpgradeLevel);
+                humanUnit.ApplyUpgradeLevel(
+                    level,
+                    GetHealthUpgradeMultiplier(level),
+                    GetPowerUpgradeMultiplier(level));
+                humanUnit.transform.position = new Vector3(
+                    savedHuman.positionX,
+                    savedHuman.positionY,
+                    humanUnit.transform.position.z);
+                humanUnit.RestoreHealth(savedHuman.currentHealth);
+                humanUnit.BeginMarch(mapLayout.WorldRight - 1.2f);
+            }
+        }
+
+        private HumanSummonCard FindCardByDisplayName(string displayName)
+        {
+            if (cards == null || string.IsNullOrWhiteSpace(displayName))
+            {
+                return null;
+            }
+
+            foreach (HumanSummonCard card in cards)
+            {
+                if (card != null &&
+                    string.Equals(
+                        card.DisplayName,
+                        displayName,
+                        StringComparison.Ordinal))
+                {
+                    return card;
+                }
+            }
+
+            return null;
+        }
+
         private void RefreshUi()
         {
             if (coinLabel != null)
